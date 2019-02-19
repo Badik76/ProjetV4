@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/html/projet-pro/models/daterdv.php</file>
-            <file>file:/var/www/html/projet-pro/models/products.php</file>
-            <file>file:/var/www/html/projet-pro/views/learnmore.php</file>
-            <file>file:/var/www/html/projet-pro/assets/js/script.js</file>
-            <file>file:/var/www/html/projet-pro/assets/css/style.css</file>
-            <file>file:/var/www/html/projet-pro/controllers/AdminPageController.php</file>
-            <file>file:/var/www/html/projet-pro/views/AdminPage.php</file>
+            <file>file:/C:/www/proprojetpro/models/users.php</file>
+            <file>file:/C:/www/proprojetpro/views/userPage.php</file>
+            <file>file:/C:/www/proprojetpro/models/daterdv.php</file>
+            <file>file:/C:/www/proprojetpro/controllers/userPageController.php</file>
         </group>
     </open-files>
 </project-private>

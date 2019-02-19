@@ -4,9 +4,7 @@ $('.collapsible').collapsible();
 // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
 $('.modal').modal();
 $('.sidenav').sidenav();
-$('.tooltipped').tooltip();
 $(".dropdown-trigger").dropdown();
-$('.materialboxed').materialbox();
 $(".buttoncollapse").sidenav();
 // carou
 $('.carousel.carousel-slider').carousel({

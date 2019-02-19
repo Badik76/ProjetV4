@@ -31,8 +31,6 @@ class daterdv extends database {
         $query = 'INSERT INTO `octopus_dateRDV` ( `dateRDV_dateRDV`, `users_id`, `prestations_id`, `timeRDV_id`) '
                 . 'VALUES (:dateRDV_dateRDV, :users_id, :prestations_id, :timeRDV_id)';
         $addRDV = $this->dataBase->prepare($query);
-//        $date = DateTime::createFromFormat('d/m/Y', $this->dateRDV);
-//        $dateUs = $date->format('Y-m-d');
         $addRDV->bindValue(':dateRDV_dateRDV', $this->dateRDV_dateRDV, PDO::PARAM_STR);
         $addRDV->bindValue(':users_id', $this->users_id, PDO::PARAM_STR);
         $addRDV->bindValue(':prestations_id', $this->prestations_id, PDO::PARAM_STR);

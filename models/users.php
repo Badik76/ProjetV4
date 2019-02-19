@@ -13,8 +13,7 @@ class octopus_users extends database {
     public $users_firstname;
     public $users_phone;
     public $users_email;
-    private $users_password;
-    public $users_adress;
+    public $users_password;
     public $users_birthdate;
     public $typeUsers_id;
 
@@ -64,6 +63,20 @@ class octopus_users extends database {
     }
 
     /**
+     * On crée un methode qui retourne la liste des users de la table users
+     * @return type ARRAY
+     */
+    public function getUserById($users_id) {    
+        $req = $this->dataBase->prepare('SELECT * FROM octopus_users WHERE users_id = ?');
+        $req->execute([$users_id]);
+        $user = false;
+        if($req->rowCount() > 0) {
+            $user = $req->fetch(PDO::FETCH_OBJ);
+        }
+        return $user;
+    }
+
+    /**
      * On crée un methode qui retourne un tableau qui contient les informations d'un user selon l'id de la table users
      * @return BOOLEAN
      */
@@ -72,7 +85,7 @@ class octopus_users extends database {
         // On met notre requète dans la variable $query qui selectionne tous les champs de la table users l'id est egal à :id via marqueur nominatif sur id
         $query = 'SELECT `users_id`, `users_lastname`, `users_firstname`,'
                 . 'DATE_FORMAT(`users_birthdate`, "%d/%m/%Y") AS `users_birthdate`,'
-                . '`users_phone`, `users_email`, `users_adress`, `typeUsers_id` '
+                . '`users_phone`, `users_email`, `typeUsers_id` '
                 . 'FROM `octopus_users`'
                 . 'WHERE `users_id` = :users_id';
         // On crée un objet $findProfil qui utilise la fonction prepare avec comme paramètre $query        
@@ -89,7 +102,6 @@ class octopus_users extends database {
                 $this->users_birthdate = $profil->users_birthdate;
                 $this->users_phone = $profil->users_phone;
                 $this->users_email = $profil->users_email;
-                $this->users_adress = $profil->users_adress;
                 $this->typeUsers_id = $profil->typeUsers_id;
                 $isCorrect = true;
             }
@@ -104,25 +116,28 @@ class octopus_users extends database {
     public function updateUserById() {
         // MAJ des données de user à l'aide d'une requête préparée avec un UPDATE et le nom des champs de la table
         // Insertion des valeurs des variables via les marqueurs nominatifs, ex :lastname).
-        $query = 'UPDATE `octopus_users` '
-                . 'SET `users_lastname` = :users_lastname,'
-                . ' `users_firstname` = :users_firstname,'
-                . ' `users_phone` = :users_phone,'
-                . ' `users_email` = :users_email,'
-                . ' `users_birthdate` = :users_birthdate'
-                . ' WHERE `users_id` = :users_id';
-        $updateUser = $this->dataBase->prepare($query);
-        // on attribue les valeurs via bindValue et on recupère les attributs de la classe via $this
-        $updateUser->bindValue(':users_lastname', $this->users_lastname, PDO::PARAM_STR);
-        $updateUser->bindValue(':users_firstname', $this->users_firstname, PDO::PARAM_STR);
-        $updateUser->bindValue(':users_phone', $this->users_phone, PDO::PARAM_STR);
-        $updateUser->bindValue(':users_email', $this->users_email, PDO::PARAM_STR);
-        $date = DateTime::createFromFormat('d/m/Y', $this->users_birthdate);
-        $dateUs = $date->format('Y-m-d');
-        $updateUser->bindValue(':users_birthdate', $dateUs, PDO::PARAM_STR);
-        $updateUser->bindValue(':users_id', $this->users_id, PDO::PARAM_INT);
-        // on utilise la méthode execute() via un return
-        return $updateUser->execute();
+//        $query = 'UPDATE `octopus_users` '
+//                . 'SET `users_lastname` = :users_lastname,'
+//                . ' `users_firstname` = :users_firstname,'
+//                . ' `users_phone` = :users_phone,'
+//                . ' `users_email` = :users_email,'
+//                . ' `users_birthdate` = :users_birthdate'
+//                . ' WHERE `users_id` = :users_id';
+//        $updateUser = $this->dataBase->prepare($query);
+//        // on attribue les valeurs via bindValue et on recupère les attributs de la classe via $this
+//        $updateUser->bindValue(':users_lastname', $_POST['users_lastname'], PDO::PARAM_STR);
+//        $updateUser->bindValue(':users_firstname', $_POST['users_firstname'], PDO::PARAM_STR);
+//        $updateUser->bindValue(':users_phone', $_POST['users_phone'], PDO::PARAM_STR);
+//        $updateUser->bindValue(':users_email', $_POST['users_email'], PDO::PARAM_STR);
+//        $updateUser->bindValue(':users_birthdate', $_POST['users_birthdate'], PDO::PARAM_STR);
+//        $updateUser->bindValue(':users_id', $this->users_id, PDO::PARAM_STR);
+//        // on utilise la méthode execute() via un return
+//        return $updateUser->execute();
+        
+    $date = DateTime::createFromFormat('d/m/Y', $_POST['users_birthdate']);
+    $dateUs = $date->format('Y-m-d');
+        $req = $this->dataBase->prepare('UPDATE octopus_users SET users_lastname = ?, users_firstname = ?, users_phone = ?, users_email = ?, users_birthdate = ? WHERE users_id = ?');
+        return $req->execute([$_POST['users_lastname'], $_POST['users_firstname'], $_POST['users_phone'], $_POST['users_email'], $dateUs, $_SESSION['users_id']]);
     }
 
     /**
@@ -160,7 +175,7 @@ class octopus_users extends database {
         // On utilise un LIKE qui nous permettra d'afficher la liste selon un critère non précis
         $query = 'SELECT `users_id`, `users_lastname`, `users_firstname`,'
                 . 'DATE_FORMAT(`users_birthdate`, "%d/%m/%Y") AS `users_birthdate`,'
-                . '`users_phone`, `users_adress`, `users_email`, `typeUsers_id`'
+                . '`users_phone`, `users_email`, `typeUsers_id`'
                 . 'FROM `octopus_users`'
                 . 'WHERE `users_lastname` LIKE :search'
                 . 'ORDER BY `users_lastname`';
@@ -186,7 +201,7 @@ class octopus_users extends database {
         // On utilise LIMIT et OFFSET qui nous permettra d'afficher la liste via une pagination
         $query = 'SELECT `users_id`, `users_lastname`, `users_firstname`,'
                 . 'DATE_FORMAT(`users_birthdate`, "%d/%m/%Y") AS `users_birthdate`,'
-                . '`users_phone`, `users_adress`, `users_email`, `typeUsers_id`'
+                . '`users_phone`, `users_email`, `typeUsers_id`'
                 . 'FROM `octopus_users`'
                 . 'ORDER BY `users_lastname`'
                 . 'LIMIT :limit OFFSET :start';
@@ -248,15 +263,6 @@ class octopus_users extends database {
         $infoUser = $verifUser->fetch(PDO::FETCH_OBJ);
         return $infoUser;
     }
-
-//    public function veriftypeUsers($typeUsers_id) {
-//        $querverifytypeUsers = 'SELECT * FROM `octopus_users` WHERE `typeUsers_id` = :typeUsers_id';
-//        $veriftypeUser = $this->dataBase->prepare($querverifytypeUsers);
-//        $veriftypeUser->bindValue(':typeUsers_id', $typeUsers_id, PDO::PARAM_STR);
-//        $veriftypeUser->execute();
-//        $infotypeUser = $veriftypeUser->fetch(PDO::FETCH_OBJ);
-//        return $infotypeUser;
-//    }
 
     public function __destruct() {
         // On appelle le destruct du parent

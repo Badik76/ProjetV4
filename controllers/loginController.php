@@ -55,8 +55,18 @@ if (count($errorArray) == 0 && isset($_POST['logButton'])) {
             $_SESSION['users_firstname'] = $infoUser->users_firstname;
             $_SESSION['users_phone'] = $infoUser->users_phone;
             $_SESSION['users_email'] = $infoUser->users_email;
+            $_SESSION['users_birthdate'] = $infoUser->users_birthdate;
             $_SESSION['typeUsers_id'] = $infoUser->typeUsers_id;
             $_SESSION['userLog'] = true;
+            
+//                        $req = $dataBase->prepare('SELECT * FROM octopus_users WHERE id = ?');
+//            $req->execute([$id]);
+//            if($req->rowCount()) {
+//                    
+//            $_SESSION['auth'] = $req->fetch();
+//                
+//            }
+//            
         }
     } else {
         session_destroy();

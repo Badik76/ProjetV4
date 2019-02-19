@@ -12,7 +12,7 @@ require_once '../controllers/userPageController.php'
             if ($userIsFind) {
                 ?>
                 <div class="card-title groundcolor"><h2><i class="material-icons">spa</i> Mon prochain RDV <i class="material-icons">spa</i></h2></div>                 
-                <div><a href="../index.php#Presta">Prendre un rdv</a></div>
+                <div><a href="../index.php#presta">Prendre un rdv</a></div>
                 <div class="card-content">
                     <table class="centered highlight responsive-table">
                         <thead>
@@ -112,7 +112,7 @@ require_once '../controllers/userPageController.php'
                 <?php }
                 ?>               
                 <div class="card-content">
-                    <form id="inscription" method="post" action="userPage.php?idUser=<?= $users->users_id ?>">
+                    <form id="inscription" method="POST" action="userPage.php">
                         <fieldset>
                             <legend>Mise à Jour <?php if (isset($_SESSION['isSuperUser'])) { ?>
                                     <i class="material-icons right">grade</i>

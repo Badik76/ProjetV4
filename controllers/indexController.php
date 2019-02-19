@@ -83,4 +83,3 @@ if (count($errorArray) == 0 && isset($_POST['addButton']) && isset($_GET['presta
         $addRDVSuccess = true;
     }
 }
-?>

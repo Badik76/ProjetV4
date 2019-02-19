@@ -12,6 +12,7 @@ $users = new octopus_users();
 $daterdv = new daterdv();
 // On instancie un nouvel $comments objet comme classe comments
 $comments = new comments();
+
 // j'attribue la valeur du $_SESSION à l'attribue users_id de l'objet $users, $daterdv, $comments
 if (isset($_SESSION['users_id'])) {
     $users->users_id = $_SESSION['users_id'];
@@ -136,18 +137,9 @@ if (isset($_POST['users_email'])) {
 
 //on vérifie que nous avons crée une entrée submit dans l'array $_POST, si présent on éxécute la méthide updateUserById()
 if (count($errorArray) == 0 && isset($_POST['updateButton'])) {
-    $_SESSION['users_id'] = $users->users_id;
     if (!$users->updateUserById()) {
         $errorArray['update'] = 'La mise à jour à échoué';
-    } else {
-        $infoUser = $users->verifUser($users_email);
-        if (is_object($infoUser)) {
-            session_regenerate_id();
-            $_SESSION['users_lastname'] = $infoUser->users_lastname;
-            $_SESSION['users_firstname'] = $infoUser->users_firstname;
-            $_SESSION['users_phone'] = $infoUser->users_phone;
-            $_SESSION['users_birthdate'] = $infoUser->users_birthdate;
-        }
+    } else {           
         $addSuccess = true;
     }
 }

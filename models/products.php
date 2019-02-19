@@ -65,7 +65,7 @@ class products extends database {
      * @return BOOLEAN
      */
     public function getProductByIdCat() {
-        
+
         // On met notre requète dans la variable $query qui selectionne tous les champs de la table users l'id est egal à :id via marqueur nominatif sur id
         $query = 'SELECT `products_id`, `products_name`, `products_image`,'
                 . ' `products_description`,`products_prix`, `productCategory_id`'
@@ -78,7 +78,7 @@ class products extends database {
         $findProduct->bindValue(':productCategory_id', $this->productCategory_id, PDO::PARAM_INT);
         $findProduct->execute();
         $products = $findProduct->fetchAll(PDO::FETCH_OBJ);
-        return $products;         
+        return $products;
     }
 
     public function updateProd() {
@@ -120,6 +120,18 @@ class products extends database {
             $this->dataBase->rollback();
             echo 'Erreur : ' . $errorMessage->getMessage(); // On affiche le message d'erreur avec la methode getMessage
         }
+    }
+
+    /* On crée un methode qui va calculer le nombre de ligne de la table products
+     * @return ARRAY contenant la valeur du nombre de ligne dans le champ totalRows
+     */
+
+    public function GetNumberProductsTotalRows() {
+        // on crée un requête pour calculer le nombre total de ligne de la table users
+        $query = 'SELECT COUNT(`products_id`) AS `totalRows` FROM `octopus_products`';
+        $totalRows = $this->dataBase->query($query);
+        $result = $totalRows->fetch(PDO::FETCH_OBJ);
+        return $result;
     }
 
     public function __destruct() {

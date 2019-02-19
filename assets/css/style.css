@@ -5,6 +5,10 @@ body {
 #logonavmob {
     width: 50px;
 }
+.btnright {
+    display: block;
+    margin-left: auto;
+}
 .row {
     margin: 0px;
 }

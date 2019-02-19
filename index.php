@@ -77,7 +77,6 @@ require_once 'controllers/indexController.php';
                 <?php } ?>  
             </ul>        
             <!--end navbar-->
-
         </header>
         <!--carou-->
         <section class="carousel carousel-slider center" >
@@ -117,10 +116,11 @@ require_once 'controllers/indexController.php';
         </section>
         <!--end carou-->
         <!-- prestation-->
-        <div class="none" id="Presta"></div> 
-        <div class="container-fluid ">
+        <div class="none" id="presta"></div> 
+        <div class="container-fluid">
             <h2 class="center">Mes Prestations</h2>
             <div  class="row">
+                <div class="hide" id="Presta"></div>
                 <?php foreach ($listPrestations AS $prestation) { ?>
                     <div class="col s12 m4 l4">
                         <div class="card">
@@ -201,7 +201,6 @@ require_once 'controllers/indexController.php';
         <!--Scripts-->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="assets/import/Materialize/js/materialize.min.js"></script>
-        <script src="assets/import/SweetAlert/sweetalert.min.js"></script>
         <script src="assets/js/script.js"></script>
     </body>
 </html>

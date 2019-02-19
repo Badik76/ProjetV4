@@ -25,7 +25,6 @@ require_once '../controllers/AdminPageController.php';
                                     <th>Nom</th>
                                     <th>Prénom</th>
                                     <th>Anniversaire</th>
-                                    <th>Adresse</th>
                                     <th>Email</th>
                                     <th>Téléphone</th>
                                     <th>Modif</th>
@@ -37,7 +36,6 @@ require_once '../controllers/AdminPageController.php';
                                         <td><?= $users->users_lastname ?></td>
                                         <td><?= $users->users_firstname ?></td>
                                         <td><?= $users->users_birthdate ?></td>
-                                        <td><?= $users->users_adress ?></td>
                                         <td><?= $users->users_email ?></td>
                                         <td>0<?= $users->users_phone ?></td>
                                         <td>
@@ -132,10 +130,11 @@ require_once '../controllers/AdminPageController.php';
                                         <div class="collapsible-header">
                                             <i class="material-icons">filter_drama</i>
                                             Catégories
+                                            <a class="waves-effect waves-light btn modal-trigger right btnright" href="#modalAddCat">Ajouter</a>
                                         </div>
                                         <div class="collapsible-body row">
                                             <!-- Modal Trigger AddCat -->
-                                            <a class="waves-effect waves-light btn modal-trigger right" href="#modalAddCat">Ajouter</a>
+
                                             <?php foreach ($showCatProd AS $productcategory) { ?>
                                                 <div class="col s2 m2 l2">
                                                     <div class="card horizontal">
@@ -195,10 +194,10 @@ require_once '../controllers/AdminPageController.php';
                                         <div class="collapsible-header">
                                             <i class="material-icons">place</i>
                                             Produits
+                                            <a class="waves-effect waves-light btn modal-trigger right btnright" href="#modalAddProd">Ajouter</a>
                                         </div>
                                         <div class="collapsible-body row">
-                                            <!-- Modal Trigger AddProd -->
-                                            <a class="waves-effect waves-light btn modal-trigger right" href="#modalAddProd">Ajouter</a>
+                                            <!-- Modal Trigger AddProd -->                                            
                                             <?php foreach ($showProd AS $products) { ?>
                                                 <div class="col s2 m2 l2">
                                                     <div class="card horizontal">

@@ -36,7 +36,7 @@ require_once '../controllers/loginController.php';
                         <div class="modal-footer">
                             <label for="remember">Se souvenir de moi ? </label>
                             <input type="checkbox" checked="checked" name="remember" id="remember" class="filled-in" />
-                            <input type="submit" class="btn" name="logButton" />
+                            <input type="submit" class="btn" name="logButton" value="Se connecter" />
                         </div>
                     </fieldset>
                 </form>

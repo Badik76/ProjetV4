@@ -1,9 +1,12 @@
 <!--controller register-->
 <?php
 require_once '../models/database.php';
+require_once '../models/users.php';
 require_once '../models/productcategory.php';
 require_once '../models/products.php';
 
+// On instancie un nouvel $users objet comme classe patients
+$users = new octopus_users();
 // On instancie un nouvel $productcategory objet comme classe productcategory
 $productcategory = new productcategory();
 // On instancie un nouvel $products objet comme classe products
