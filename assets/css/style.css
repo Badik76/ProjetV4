@@ -28,6 +28,10 @@ legend {
     text-align: center;
 }
 
+h1 {
+    color: #0b6e4f;
+    text-shadow: 1px 1px 1px black;
+}
 h2 {
     color : #4db6ac
 }
@@ -48,11 +52,12 @@ h2 {
 nav .brand-logo {
     padding-left: 20px;
 }
-
-.modal {
-    max-height: 525px;
+.modal .modal-content {
+    min-height: 430px;
 }
-
+.modrdv {
+    height: 525px;
+}
 div#modal.modal.open {
     height: 500px;
 }
@@ -65,8 +70,8 @@ div#modal.modal.open {
 }
 /* carousel */
 .carousel {
-    box-shadow: 2px 1px 5px 1px black;
     height: 90vh;
+    padding-top: auto; 
 }
 .carousel img {
     z-index: 0;
@@ -74,7 +79,7 @@ div#modal.modal.open {
     width: auto;
 }
 .carousel.carousel-slider.carousel-item {
-    max-height: 700px;
+    max-height: auto;
     vertical-align: center;
 }
 

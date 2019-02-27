@@ -10,7 +10,6 @@ $users = new octopus_users();
 //déclaration des regexs   
 $regexName = '/^[a-zA-Zàáâãäåçèéêëìíîïðòóôõöùúûüýÿ-]+$/';
 $regexBirthdate = '/^(0[1-9]|([1-2][0-9])|3[01])\/(0[1-9]|1[012])\/((19|20)[0-9]{2})$/';
-$regexEmail = '/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,6}$/'; // regex date au format yyyy-mm-dd
 $regexPhoneNumber = '/^[0-9]{10,10}$/';
 $regexPassword = "/^.{6,}+$/";
 
@@ -72,9 +71,9 @@ if (isset($_POST['users_phone'])) {
 //On test la valeur email dans l'array $_POST, si elle existe via premier if
 if (isset($_POST['users_email'])) {
     // Variable mail qui vérifie que les caractères speciaux soit converties en entité html
-    $users->users_email = $_POST['users_email'];
+    $users->users_email = filter_var($_POST['users_email'],FILTER_SANITIZE_EMAIL);
     // On test que la variable n'est pas égale à la regeX
-    if (!preg_match($regexEmail, $users->users_email)) {
+    if (!filter_var($users->users_email, FILTER_VALIDATE_EMAIL)) {
         // J'affiche l'erreur
         $errorArray['users_email'] = 'Votre mail doit être du type mail@mail.com';
     }
@@ -128,4 +127,3 @@ if (count($errorArray) == 0 && isset($_POST['addButton'])) {
         $addSuccess = true;
     }
 }
-?>

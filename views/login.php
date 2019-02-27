@@ -12,6 +12,7 @@ require_once '../controllers/loginController.php';
             <?php } if (isset($_SESSION['userLog'])) { ?>
                 <?php if ($logSuccess) { ?>
                     <h2 class="center"> Connexion établie ! </h2>
+                    <a class="center" href="userPage.php">Accéder à mon compte</a>
                     <?php
                 }
             } else {

@@ -58,8 +58,8 @@ if (count($errorArray) == 0 && isset($_POST['logButton'])) {
             $_SESSION['users_birthdate'] = $infoUser->users_birthdate;
             $_SESSION['typeUsers_id'] = $infoUser->typeUsers_id;
             $_SESSION['userLog'] = true;
-            
-//                        $req = $dataBase->prepare('SELECT * FROM octopus_users WHERE id = ?');
+
+//            $req = $dataBase->prepare('SELECT * FROM octopus_users WHERE id = ?');
 //            $req->execute([$id]);
 //            if($req->rowCount()) {
 //                    
@@ -87,6 +87,4 @@ if (count($errorArray) == 0 && isset($_POST['logButton'])) {
             $_SESSION['isAdmin'] = true;
         }
     }
-    var_dump($_SESSION);
 }
-?>

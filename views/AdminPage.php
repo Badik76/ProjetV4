@@ -116,7 +116,7 @@ require_once '../controllers/AdminPageController.php';
             </li>
             <li class="<?= $showme3 ?>">
                 <div class="collapsible-header">                        
-                    <h2><i class="material-icons">lightbulb_outline</i>Gestion des Produits<i class="material-icons">lightbulb_outline</i></h2>
+                    <h2><i class="material-icons">shopping_basket</i>Gestion des Produits<i class="material-icons">shopping_basket</i></h2>
                 </div>
                 <div class="collapsible-body">
                     <div class="col m12 l6">
@@ -328,6 +328,43 @@ require_once '../controllers/AdminPageController.php';
                         </form>
                         <!--fin du col-->
                     </div>
+                </div>
+            <li class="<?= $showme4 ?>">
+                <div class="collapsible-header">                        
+                    <h2><i class="material-icons">comment</i>Gestion des Commentaires<i class="material-icons">comment</i></h2>
+                </div>
+                <div class="collapsible-body">
+                    <p class="center-align"><?= $deletecommentOk ? 'Le commentaire est effacé' : '' ?><p>
+                    <table class="centered highlight responsive-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Commentaire</th>
+                                <th>Valider</th>
+                                <th>Supprimer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($commentsList AS $comments) { ?>
+                                <tr>
+                                    <td><?= $comments->users_lastname ?></td>
+                                    <td><?= $comments->users_firstname ?></td>
+                                    <td><?= $comments->comments_comment ?></td>
+                                    <td>
+                                        <a class="green darken-1" href="AdminPage.php?ValideComment=<?= $comments->comments_id ?>" name="action">
+                                            <i class="material-icons right green-text">check</i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn red darken-1 collUser" href="AdminPage.php?deleteComment=<?= $comments->comments_id ?>" name="action">Delete
+                                            <i class="large material-icons right">cancel</i>
+                                        </a>                                        
+                                    </td>        
+                                </tr>
+                            <?php } ?><!-- fin de la boucle for each -->
+                        </tbody>
+                    </table>
                 </div>
             </li>
         </ul>

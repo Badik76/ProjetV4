@@ -9,8 +9,8 @@ require_once '../controllers/registerController.php';
     <div class="container">
         <div id="AddUser" class="card-panel">
             <?php if ($addSuccess) { ?>
-                <h2> Profil enregistré ! </h2>
-                <a href="login.php">Se Connecter</a>
+                <h2 class="center"> Profil enregistré ! </h2>
+                <a class="center" href="login.php">Se Connecter</a>
             <?php } else { ?>                             
                 <!-- form inscription-->
                 <form id="addUser" action="register.php" method="POST">

@@ -18,7 +18,7 @@ require_once '../controllers/productController.php';
                 <?php
                 foreach ($findProd as $products) {
                     ?>
-                    <div class="col s12 m6 l4">
+                    <div class="col s6 m4 l3">
                         <div class="card">
                             <div class="card-image">
                                 <img class="responsive-img-products" src="../assets/img/<?= $products->products_image ?>" alt="<?= $products->products_description ?>" />

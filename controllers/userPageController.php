@@ -4,7 +4,9 @@
 require_once '../models/database.php';
 require_once '../models/users.php';
 require_once '../models/daterdv.php';
+require_once '../models/timerdv.php';
 require_once '../models/comments.php';
+require_once '../models/prestations.php';
 
 // On instancie un nouvel $users objet comme classe patients
 $users = new octopus_users();
@@ -12,6 +14,10 @@ $users = new octopus_users();
 $daterdv = new daterdv();
 // On instancie un nouvel $comments objet comme classe comments
 $comments = new comments();
+// On instancie un nouvel $comments objet comme classe comments
+$prestations = new prestations();
+// On instancie un nouvel $prestations objet comme classe $prestations
+$timerdv = new timerdv();
 
 // j'attribue la valeur du $_SESSION à l'attribue users_id de l'objet $users, $daterdv, $comments
 if (isset($_SESSION['users_id'])) {
@@ -28,6 +34,11 @@ $userIsFind = $users->getUsersById();
  */
 $rdvidUserList = $daterdv->getRDVByidUser();
 $rdvFind = $daterdv->getRDVByid();
+// On appel la methode ShowTimeRDV dans l'objet $showTimeRDV
+$showTimeRDV = $timerdv->ShowTimeRDV();
+
+$showrdv = $daterdv->showRDVbefore();
+
 //déclaration des regexs   
 $regexName = '/^[a-zA-Zàáâãäåçèéêëìíîïðòóôõöùúûüýÿ-]+$/';
 $regexBirthdate = '/^(0[1-9]|([1-2][0-9])|3[01])\/(0[1-9]|1[012])\/((19|20)[0-9]{2})$/'; // regex date au format yyyy-mm-dd
@@ -51,6 +62,7 @@ $deleteOk = false;
 $isSuperUser = false;
 $rdvalide = false;
 $addCommentSuccess = false;
+$upRDVSuccess = false;
 //on vérifie que le rdv est validé 
 if ($daterdv->dateRDV_validate == 1) {
     $rdvalide = true;
@@ -139,7 +151,7 @@ if (isset($_POST['users_email'])) {
 if (count($errorArray) == 0 && isset($_POST['updateButton'])) {
     if (!$users->updateUserById()) {
         $errorArray['update'] = 'La mise à jour à échoué';
-    } else {           
+    } else {
         $addSuccess = true;
     }
 }
@@ -169,12 +181,54 @@ if (count($errorArray) == 0 && isset($_POST['addComment'])) {
         $daterdv->putRDVarchivate();
     }
 }
+
+//Update RDV
+//On test la valeur date l'array $_POST pour savoir si elle existe
+//Si ok, nous testons la valeur
+if (isset($_POST['dateRDV_dateRDV'])) {
+    // si ne correspond pas à la regex, on crée un message d'erreur personnalisé dans $errorArray
+    if (!preg_match($regexDate, $_POST['dateRDV_dateRDV'])) {
+        // je crée le message d'erreur suivant dans le tableau d'erreur
+        $errorArray['dateRDV_dateRDV'] = 'La date doit être au format 30/10/1985';
+    }
+    // si vide, on crée un message d'erreur personnalisé dans $formError
+    if (empty($_POST['dateRDV_dateRDV'])) {
+        // je crée le message d'erreur suivant dans le tableau d'erreur
+        $errorArray['dateRDV_dateRDV'] = '*Champs date obligatoire';
+    }
+}
+
+//On test la valeur idTimeRDV l'array $_POST pour savoir si elle existe
+//Si nous attribuons à idTimeRDV la valeur du $_POST
+if (isset($_POST['timeRDV_id'])) {
+    $timerdv->timeRDV_id = $_POST['timeRDV_id'];
+    // OU si le formulaire a été validé mais que il n'y a pas d'élément sélectionné dans le menu déroulant
+    // on crée un message d'erreur pour pouvoir l'afficher
+    if (is_nan($timerdv->timeRDV_id)) {
+        $errorArray['timeRDV_id'] = '*Veuillez sélectionner uniquement une heure de la liste';
+    }
+} else if (isset($_POST['addButton']) && !array_key_exists('timeRDV_id', $_POST)) {
+    $errorArray['timeRDV_id'] = '*Veuillez sélectionner une heure';
+}
+
+
+if (count($errorArray) == 0 && isset($_GET['dateRDV_id']) && isset($_POST['updateRDVButton'])) {
+    $daterdv->timeRDV_id = $_GET['timeRDV_id'];
+    $date = DateTime::createFromFormat('d/m/Y', $_POST['dateRDV_dateRDV']);
+    $dateUs = $date->format('Y-m-d');
+    $daterdv->dateRDV_dateRDV = $dateUs;
+    if (!$daterdv->updaterdv()) {
+        $errorArray['update'] = 'La mise à jour à échoué';
+    } else {
+        $upRDVSuccess = true;
+    }
+}
 /* on test que $_GET['DeleteCatProd'] n'est pas vide
  * si non vide, on attribue à $productcategory id la valeur du get avec un htmlspecialchars pour la protection
  * et on applique la methode deleteCatProd pour del la productcategory
  */
 if (!empty($_GET['DeleteRDV'])) {
-    $daterdv->users_id = htmlspecialchars($_GET['DeleteRDV']);
+    $daterdv->users_id = $_SESSION['users_id'];
     $daterdv->deleteRDVbyID();
     $daterdvDEL = true;
 }

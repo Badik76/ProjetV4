@@ -84,40 +84,42 @@ require_once 'controllers/indexController.php';
                 <div class="carousel-item" href="#one!">
                     <li>
                         <div class="carousel-fixed-item center">
-                            <h2><b>Wellness Reiki</b></h2>
-                            <p>Découvert et développé à partir de 1922 par Mikao Usui, le Reiki est une technique de relaxation japonaise qui se pratique par apposition des mains.
-                                <br />Ainsi pendant une séance de Reiki, en tant que praticien énergéticien, je canalise l'énergie environnante et vous la transmets en positionnant mes mains sur différentes parties de votre corps (notamment sur les centres énergétiques, les "chakras" pour les hindous). Cette énergie va ensuite se diriger sur les endroits de votre corps qui en ont le plus besoin.</p>
+                            <h1><b>Wellness Reiki</b></h1>
+                            <p><b>Découvert et développé à partir de 1922 par Mikao Usui, le Reiki est une technique de relaxation japonaise qui se pratique par apposition des mains.<br />
+                                Ainsi pendant une séance de Reiki, en tant que praticien énergéticien, <br />
+                                je canalise l'énergie environnante et vous la transmets en positionnant mes mains sur différentes parties de votre corps (notamment sur les centres énergétiques, <br />
+                                les "chakras" pour les hindous). Cette énergie va ensuite se diriger sur les endroits de votre corps qui en ont le plus besoin.</b></p>
                         </div>
-                        <img src="./assets/img/carou1.jpeg" class="responsive-img" alt="carou1" title="REIKI" id="slide1"/>
+                        <img src="./assets/img/carou1.jpeg" alt="carou1" title="REIKI" id="slide1"/>
                     </li>
                 </div>
                 <div class="carousel-item" href="#two!">
                     <li>
                         <div class="carousel-fixed-item center">
-                            <h2>Des Effets Ressentis</h2>
-                            <p>Les effets bénéfiques (calme, détente, libération des tensions, blocages, etc.…) se font généralement ressentir dès la première séance.
-                                   <br />Les effets sont tant au niveau du mental, des émotions que du physique. En dénouant les blocages énergétiques et émotionnels, il est possible que des émotions refoulées réapparaissent. Il est important d'accepter ces sentiments et émotions.
-                                <br />Sachez que cela agit toujours pour votre bien-être en développant le processus d'auto-guérissons.</p>
+                            <h1><b>Des Effets Ressentis</b></h1>
+                            <p><b>Les effets bénéfiques (calme, détente, libération des tensions, blocages, etc.…) se font généralement ressentir dès la première séance.
+                                   <br />Les effets sont tant au niveau du mental, des émotions que du physique. <br />
+                                En dénouant les blocages énergétiques et émotionnels, il est possible que des émotions refoulées réapparaissent. Il est important d'accepter ces sentiments et émotions. <br />
+                                <br />Sachez que cela agit toujours pour votre bien-être en développant le processus d'auto-guérissons.</b></p>
                         </div>
-                        <img src="./assets/img/carou2.jpeg" class="responsive-img" alt="carou2" title="BIJOUX" id="slide2"/>
+                        <img src="./assets/img/carou2.jpeg" alt="carou2" title="BIJOUX" id="slide2"/>
                     </li>
                 </div>
                 <div class="carousel-item" href="#three!">
                     <li>
                         <div class="carousel-fixed-item center">
-                            <h2>L'auto-guérisson</h2>
-                            <p>Une séance ressource, détend, libère les blocages énergétiques, renforce le système immunitaire, diminue la douleur et élimine les toxines du corps.
-                                <br />Il est évident que rien n'est imposé, ni figé ! Toutes les décisions seront libres et prises par vous !</p>
+                            <h1><b>L'auto-guérisson</b></h1>
+                            <p><b>Une séance ressource, détend, libère les blocages énergétiques, renforce le système immunitaire, diminue la douleur et élimine les toxines du corps.
+                                    <br />Il est évident que rien n'est imposé, ni figé ! Toutes les décisions seront libres et prises par vous !</b></p>
                         </div>
-                        <img src="./assets/img/carou3.jpeg" class="responsive-img" alt="carou3" title="COUCOU" id="slide3"/>
+                        <img src="./assets/img/carou3.jpeg" alt="carou3" title="COUCOU" id="slide3"/>
                     </li>
                 </div>
             </ul>
         </section>
         <!--end carou-->
-        <!-- prestation-->
-        <div class="none" id="presta"></div> 
-        <div class="container-fluid">
+        <!-- prestation-->         
+        <div id="presta" class="container-fluid">
             <h2 class="center">Mes Prestations</h2>
             <div  class="row">
                 <div class="hide" id="Presta"></div>
@@ -133,13 +135,15 @@ require_once 'controllers/indexController.php';
                                 <?php } ?>
                             </div>
                             <div class="card-content">
-                                <p class="truncate"><?= $prestation->prestations_description ?></p>
+                                <p class="<?php if (isset($_SESSION['userLog'])) { ?> truncate <?php } ?>">
+                                        <?= $prestation->prestations_description ?>
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <!-- Modal Structure AddCat-->
+                    <!-- Modal Structure AddRDVbyPresta-->
                     <div id="modalID<?= $prestation->prestations_id ?>" class="modal">
-                        <div class="modal-content">
+                        <div class="modal-content modrdv">
                             <form id="addRDV" action="index.php?prestations_id=<?= $prestation->prestations_id ?>" method="POST">
                                 <fieldset>
                                     <legend>Prendre un RDV <?= $prestation->prestations_name ?></legend>

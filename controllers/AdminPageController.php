@@ -7,6 +7,7 @@ require_once '../models/timerdv.php';
 require_once '../models/productcategory.php';
 require_once '../models/products.php';
 require_once '../models/daterdv.php';
+require_once '../models/comments.php';
 
 // On instancie un nouvel $users objet comme classe users
 $users = new octopus_users();
@@ -20,6 +21,8 @@ $productcategory = new productcategory();
 $products = new products();
 // On instancie un nouvel $productcategory objet comme classe productcategory
 $daterdv = new daterdv();
+// On instancie un nouvel $productcategory objet comme classe productcategory
+$comments = new comments();
 
 // On appel la methode getAppointmentsList dans l'objet $listAppointments
 $listPrestations = $prestations->getPrestationsList();
@@ -31,7 +34,8 @@ $showCatProd = $productcategory->showCatProd();
 $showProd = $products->showProduct();
 // On appel la methode $resultList dans l'objet showRDV
 $resultList = $daterdv->showRDV();
-
+// On appel la methode $resultList dans l'objet showRDV
+$commentsList = $comments->showComment2();
 
 //déclaration des regexs   
 $regexName = '/^[A-z\'\- 0-9]{1,}$/';
@@ -63,10 +67,12 @@ $noMatch = false;
  * cette variable va nous permettre d'afficher un message lors de la suppression d'un user
  */
 $deleteOk = false;
+$deletecommentOk = false;
 //Déclaration de 3 variables vides pour activer les collapses lors des clics
 $showme = '';
 $showme2 = '';
 $showme3 = '';
+$showme4 = '';
 $showrdvcat = '';
 //vérification pour collapse.
 if (isset($_GET['page']) || (isset($_GET['deleteThis'])) || (isset($_GET['GetUserSuperUser'])) || (isset($_GET['DelSuperUser']))) {
@@ -96,6 +102,12 @@ if (!empty($_GET['deleteThis'])) {
     $users->deleteUser();
     $deleteOk = true;
 }
+
+if (!empty($_GET['deleteComment'])) {
+    $comments->comments_id = htmlspecialchars($_GET['deleteComment']);
+    $comments->deleteComment();
+    $deletecommentOk = true;
+}
 /* on test que $_GET['search'] et qu'il n'est pas vide
  * si ok, on crée un tableau avec la methode findPatientsBySearch avec comme paramètre $_GET['search']
  * on fait un si imbrique pour tester si le tableau est vide via un count, si vide crée un message d'erreur pour $noMatchMessage
@@ -118,7 +130,7 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 if (!empty($_GET['GetUserSuperUser'])) {
     $users->users_id = htmlspecialchars($_GET['GetUserSuperUser']);
     $users->putUserSuperUser();
-    $_SESSION['typeUsers_id'] = $infoUser->typeUsers_id;
+    $_SESSION['typeUsers_id'] = $users->typeUsers_id;
     $superUserOK = true;
 }
 /* on test que $_GET['DelSuperUser'] n'est pas vide
@@ -128,7 +140,7 @@ if (!empty($_GET['GetUserSuperUser'])) {
 if (!empty($_GET['DelSuperUser'])) {
     $users->users_id = htmlspecialchars($_GET['DelSuperUser']);
     $users->delSuperUser();
-    $_SESSION['typeUsers_id'] = $infoUser->typeUsers_id;
+    $_SESSION['typeUsers_id'] = $users->typeUsers_id;
     $superUserDEL = true;
 }
 

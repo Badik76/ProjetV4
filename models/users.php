@@ -114,26 +114,7 @@ class octopus_users extends database {
      * @return BOOLEAN
      */
     public function updateUserById() {
-        // MAJ des données de user à l'aide d'une requête préparée avec un UPDATE et le nom des champs de la table
-        // Insertion des valeurs des variables via les marqueurs nominatifs, ex :lastname).
-//        $query = 'UPDATE `octopus_users` '
-//                . 'SET `users_lastname` = :users_lastname,'
-//                . ' `users_firstname` = :users_firstname,'
-//                . ' `users_phone` = :users_phone,'
-//                . ' `users_email` = :users_email,'
-//                . ' `users_birthdate` = :users_birthdate'
-//                . ' WHERE `users_id` = :users_id';
-//        $updateUser = $this->dataBase->prepare($query);
-//        // on attribue les valeurs via bindValue et on recupère les attributs de la classe via $this
-//        $updateUser->bindValue(':users_lastname', $_POST['users_lastname'], PDO::PARAM_STR);
-//        $updateUser->bindValue(':users_firstname', $_POST['users_firstname'], PDO::PARAM_STR);
-//        $updateUser->bindValue(':users_phone', $_POST['users_phone'], PDO::PARAM_STR);
-//        $updateUser->bindValue(':users_email', $_POST['users_email'], PDO::PARAM_STR);
-//        $updateUser->bindValue(':users_birthdate', $_POST['users_birthdate'], PDO::PARAM_STR);
-//        $updateUser->bindValue(':users_id', $this->users_id, PDO::PARAM_STR);
-//        // on utilise la méthode execute() via un return
-//        return $updateUser->execute();
-        
+            
     $date = DateTime::createFromFormat('d/m/Y', $_POST['users_birthdate']);
     $dateUs = $date->format('Y-m-d');
         $req = $this->dataBase->prepare('UPDATE octopus_users SET users_lastname = ?, users_firstname = ?, users_phone = ?, users_email = ?, users_birthdate = ? WHERE users_id = ?');

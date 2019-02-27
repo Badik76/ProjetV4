@@ -65,7 +65,33 @@ class daterdv extends database {
         // On retourne le resultat
         return $resultList;
     }
-
+    /**
+     * On crée un methode qui retourne la liste des rdv de la table daterdv
+     * @return type ARRAY -> WARNING -> is_object ?
+     */
+    public function showRDVbefore() {
+        // On met notre requète dans la variable $query qui selectionne tous les champs de la table Produits
+        $query = 'SELECT `octopus_dateRDV`.`dateRDV_id`,`octopus_dateRDV`.`prestations_id`, `octopus_dateRDV`.`dateRDV_validate`,'
+                . '`octopus_dateRDV`.`users_id`,`octopus_dateRDV`.`dateRDV_dateRDV`,'
+                . '`octopus_users`.`users_lastname`, `octopus_users`.`users_firstname`,'
+                . '`octopus_users`.`users_phone`,`octopus_timeRDV`.`timeRDV_timeRDV`,'
+                . '`octopus_prestations`.`prestations_id`, `octopus_prestations`.`prestations_name`'
+                . 'FROM `octopus_dateRDV`'
+                . 'INNER JOIN `octopus_users` ON `octopus_dateRDV`.`users_id` = `octopus_users`.`users_id`'
+                . 'INNER JOIN `octopus_prestations` ON `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
+                . 'INNER JOIN `octopus_timeRDV` ON `octopus_dateRDV`.`timeRDV_id` = `octopus_timeRDV`.`timeRDV_id`'
+                . 'WHERE `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
+                . 'AND `octopus_dateRDV`.`dateRDV_dateRDV` < NOW()'
+                . 'ORDER BY `octopus_dateRDV`.`dateRDV_dateRDV`' //DESC
+                . 'LIMIT 3';
+        // On crée un objet $result qui exécute la méthode query() avec comme paramètre $query
+        $showresult = $this->dataBase->query($query);
+        // On crée un objet $resultList qui est un tableau.
+        // La fonction fetchAll permet d'afficher toutes les données de la requète dans un tableau d'objet via le paramètre (PDO::FETCH_OBJ)
+        $resultList = $showresult->fetchAll(PDO::FETCH_OBJ);
+        // On retourne le resultat
+        return $resultList;
+    }
     /**
      * On crée un methode qui retourne un tableau qui contient les informations d'un rdv selon l'idPresta de la table daterdv
      * @return BOOLEAN

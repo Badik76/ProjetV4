@@ -29,14 +29,46 @@ require_once '../controllers/userPageController.php'
                                     <td><?= $daterdv->prestations_name ?></td>
                                     <td><?= $daterdv->dateRDV_dateRDV ?></td>
                                     <td><?= $daterdv->timeRDV_timeRDV ?></td>
-                                    <td><a href="userPage.php?idUser=<?= $users->users_id ?>&DeleteRDV=<?= $daterdv->dateRDV_id ?>" name="action">
+                                    <td><a href="userPage.php?DeleteRDV=<?= $daterdv->dateRDV_id ?>" name="action">
                                             <i class="material-icons red-text">cancel</i>
                                         </a>
-                                        <a class="" href="userPage.php" name="action">
+                                        <a class="modal-trigger" href="#modalID<?= $daterdv->dateRDV_id ?>" name="action">
                                             <i class="material-icons green-text">autorenew</i>
                                         </a></td>
                                 </tr>
-                            <?php } ?>
+                                <!-- Modal Structure upRDV-->
+                            <div id="modalID<?= $daterdv->dateRDV_id ?>" class="modal">
+                                <div class="modal-content">
+                                    <form id="addRDV" action="userPage.php?dateRDV_id=<?= $daterdv->dateRDV_id ?>" method="POST">
+                                        <fieldset>
+                                            <legend>Modifier mon RDV <?= $prestations->prestations_name ?></legend>
+                                            <p class="center-align"><?= $upRDVSuccess ? 'Le rdv est enregistré' : '' ?><p>
+                                            <p><b><?= $prestations->prestations_description ?></b></p>
+                                            <p class="left">Temps de la séance : 1 heure</p>
+                                            <p class="right">Prix à domicile : 35 €</p>
+                                            <div>                                        
+                                                <input name="dateRDV_dateRDV" type="text" id="dateRDV_dateRDV" required class="validate datepicker" value="<?= $daterdv->dateRDV_dateRDV ?>" />
+                                            </div>
+                                            <div class="input-field">
+                                                <select id="timeRDV_id" name="timeRDV_id">
+                                                    <option value="0" disabled selected><?= $daterdv->timeRDV_timeRDV ?></option>
+                                                    <?php foreach ($showTimeRDV AS $timerdv) { ?>
+                                                        <option value="<?= $timerdv->timeRDV_id ?>"><?= $timerdv->timeRDV_timeRDV ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <p class="error"><?= isset($errorArray['timeRDV_id']) ? $errorArray['timeRDV_id'] : '' ?></p>
+                                            </div>                                   
+                                            <div class="input-field">
+                                                <input name="updateRDVButton" type="submit" class="waves-effect waves-light btn teal" value="Modifier le RDV"/>
+                                                <?php foreach ($errorArray AS $error) { ?>
+                                                    <p class="error"><?= $error ?></p>
+                                                <?php } ?>                            
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php } ?>
                         </tbody>
                     </table>
                 </div>
@@ -54,7 +86,7 @@ require_once '../controllers/userPageController.php'
                                 <th>Comments</th>
                             </tr>
                         </thead>
-                        <?php foreach ($rdvidUserList AS $daterdv) { ?>
+                        <?php foreach ($showrdv AS $daterdv) { ?>
                             <tbody>
                                 <tr>
                                     <td><?= $daterdv->prestations_name ?></td>
