@@ -1,11 +1,16 @@
-
-<!--controller login-->
+<!--controller userPage-->
 <?php
+//appel du model db
 require_once '../models/database.php';
+//appel du model users
 require_once '../models/users.php';
+//appel du model daterdv
 require_once '../models/daterdv.php';
+//appel du model timerdv
 require_once '../models/timerdv.php';
+//appel du model comments
 require_once '../models/comments.php';
+//appel du model prestations
 require_once '../models/prestations.php';
 
 // On instancie un nouvel $users objet comme classe patients
@@ -19,7 +24,7 @@ $prestations = new prestations();
 // On instancie un nouvel $prestations objet comme classe $prestations
 $timerdv = new timerdv();
 
-// j'attribue la valeur du $_SESSION à l'attribue users_id de l'objet $users, $daterdv, $comments
+// j'associe la valeur du $_SESSION à l'attribue users_id de l'objet $users, $daterdv, $comments
 if (isset($_SESSION['users_id'])) {
     $users->users_id = $_SESSION['users_id'];
     $daterdv->users_id = $_SESSION['users_id'];
@@ -42,6 +47,8 @@ $showrdv = $daterdv->showRDVbefore();
 //déclaration des regexs   
 $regexName = '/^[a-zA-Zàáâãäåçèéêëìíîïðòóôõöùúûüýÿ-]+$/';
 $regexBirthdate = '/^(0[1-9]|([1-2][0-9])|3[01])\/(0[1-9]|1[012])\/((19|20)[0-9]{2})$/'; // regex date au format yyyy-mm-dd
+//Création des regex pour controler les données du formulaire
+$regexDate = '/^(0[1-9]|([1-2][0-9])|3[01])\/(0[1-9]|1[012])\/((19|20)[0-9]{2})$/';
 $regexEmail = '/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,6}$/';
 $regexPhoneNumber = '/^[0-9]{10,10}$/';
 $regexPassword = "/^.{6,}+$/";
@@ -196,33 +203,39 @@ if (isset($_POST['dateRDV_dateRDV'])) {
         // je crée le message d'erreur suivant dans le tableau d'erreur
         $errorArray['dateRDV_dateRDV'] = '*Champs date obligatoire';
     }
+    if (strtotime('today') < strtotime($_POST['dateRDV_dateRDV'])) {
+        $errorArray['dateRDV_dateRDV'] = 'La date est invalide.';
+    }
 }
 
 //On test la valeur idTimeRDV l'array $_POST pour savoir si elle existe
 //Si nous attribuons à idTimeRDV la valeur du $_POST
 if (isset($_POST['timeRDV_id'])) {
-    $timerdv->timeRDV_id = $_POST['timeRDV_id'];
+    $time = $_POST['timeRDV_id'];
     // OU si le formulaire a été validé mais que il n'y a pas d'élément sélectionné dans le menu déroulant
     // on crée un message d'erreur pour pouvoir l'afficher
-    if (is_nan($timerdv->timeRDV_id)) {
+    if (is_nan($time)) {
         $errorArray['timeRDV_id'] = '*Veuillez sélectionner uniquement une heure de la liste';
     }
-} else if (isset($_POST['addButton']) && !array_key_exists('timeRDV_id', $_POST)) {
+} elseif (isset($_POST['timeRDV_id']) && !array_key_exists('timeRDV_id', $_POST)) {
     $errorArray['timeRDV_id'] = '*Veuillez sélectionner une heure';
+} else {
+    $errorArray['timeRDV_id'] = '*Erreur interne...';
 }
 
-
 if (count($errorArray) == 0 && isset($_GET['dateRDV_id']) && isset($_POST['updateRDVButton'])) {
-    $daterdv->timeRDV_id = $_GET['timeRDV_id'];
+    $daterdv->dateRDV_id = $_GET['dateRDV_id'];
+    $daterdv->timeRDV_id = $_POST['timeRDV_id'];
     $date = DateTime::createFromFormat('d/m/Y', $_POST['dateRDV_dateRDV']);
     $dateUs = $date->format('Y-m-d');
     $daterdv->dateRDV_dateRDV = $dateUs;
-    if (!$daterdv->updaterdv()) {
+    if (!$daterdv->updaterdv($daterdv->dateRDV_id, $daterdv->dateRDV_dateRDV, $daterdv->timeRDV_id)) {
         $errorArray['update'] = 'La mise à jour à échoué';
     } else {
         $upRDVSuccess = true;
     }
 }
+
 /* on test que $_GET['DeleteCatProd'] n'est pas vide
  * si non vide, on attribue à $productcategory id la valeur du get avec un htmlspecialchars pour la protection
  * et on applique la methode deleteCatProd pour del la productcategory
@@ -233,10 +246,7 @@ if (!empty($_GET['DeleteRDV'])) {
     $daterdvDEL = true;
 }
 
-
-
 //on compte l'array $appointmentsList pour savoir s'il est vide, si vide on donne la valeur true à $NoAppointment
 if (count($rdvidUserList) == 0) {
     $noRDV = true;
 }
-?>

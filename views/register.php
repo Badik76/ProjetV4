@@ -13,7 +13,7 @@ require_once '../controllers/registerController.php';
                 <a class="center" href="login.php">Se Connecter</a>
             <?php } else { ?>                             
                 <!-- form inscription-->
-                <form id="addUser" action="register.php" method="POST">
+                <form id="addUser" action="register.php" method="POST" novalidate="">
                     <fieldset>
                         <legend>Inscription</legend>
                         <div>
@@ -40,7 +40,7 @@ require_once '../controllers/registerController.php';
                         <div>
                             <label for="users_email">Email : (ex: mail@mail.fr)</label>
                             <div>
-                                <span class="error"><?= isset($errorArray['email']) ? $errorArray['email'] : ''; ?></span>
+                                <span class="error"><?= isset($errorArray['users_email']) ? $errorArray['users_email'] : ''; ?></span>
                             </div>   
                             <input name="users_email" type="email" id="users_email" required class="validate"  value="<?= isset($_POST['users_email']) ? $_POST['users_email'] : '' ?>" />
                         </div>

@@ -86,9 +86,9 @@ require_once 'controllers/indexController.php';
                         <div class="carousel-fixed-item center">
                             <h1><b>Wellness Reiki</b></h1>
                             <p><b>Découvert et développé à partir de 1922 par Mikao Usui, le Reiki est une technique de relaxation japonaise qui se pratique par apposition des mains.<br />
-                                Ainsi pendant une séance de Reiki, en tant que praticien énergéticien, <br />
-                                je canalise l'énergie environnante et vous la transmets en positionnant mes mains sur différentes parties de votre corps (notamment sur les centres énergétiques, <br />
-                                les "chakras" pour les hindous). Cette énergie va ensuite se diriger sur les endroits de votre corps qui en ont le plus besoin.</b></p>
+                                    Ainsi pendant une séance de Reiki, en tant que praticien énergéticien, <br />
+                                    je canalise l'énergie environnante et vous la transmets en positionnant mes mains sur différentes parties de votre corps (notamment sur les centres énergétiques, <br />
+                                    les "chakras" pour les hindous). Cette énergie va ensuite se diriger sur les endroits de votre corps qui en ont le plus besoin.</b></p>
                         </div>
                         <img src="./assets/img/carou1.jpeg" alt="carou1" title="REIKI" id="slide1"/>
                     </li>
@@ -98,9 +98,9 @@ require_once 'controllers/indexController.php';
                         <div class="carousel-fixed-item center">
                             <h1><b>Des Effets Ressentis</b></h1>
                             <p><b>Les effets bénéfiques (calme, détente, libération des tensions, blocages, etc.…) se font généralement ressentir dès la première séance.
-                                   <br />Les effets sont tant au niveau du mental, des émotions que du physique. <br />
-                                En dénouant les blocages énergétiques et émotionnels, il est possible que des émotions refoulées réapparaissent. Il est important d'accepter ces sentiments et émotions. <br />
-                                <br />Sachez que cela agit toujours pour votre bien-être en développant le processus d'auto-guérissons.</b></p>
+                                       <br />Les effets sont tant au niveau du mental, des émotions que du physique. <br />
+                                    En dénouant les blocages énergétiques et émotionnels, il est possible que des émotions refoulées réapparaissent. Il est important d'accepter ces sentiments et émotions. <br />
+                                    <br />Sachez que cela agit toujours pour votre bien-être en développant le processus d'auto-guérissons.</b></p>
                         </div>
                         <img src="./assets/img/carou2.jpeg" alt="carou2" title="BIJOUX" id="slide2"/>
                     </li>
@@ -108,7 +108,7 @@ require_once 'controllers/indexController.php';
                 <div class="carousel-item" href="#three!">
                     <li>
                         <div class="carousel-fixed-item center">
-                            <h1><b>L'auto-guérisson</b></h1>
+                            <h1><b>L'auto-guérison</b></h1>
                             <p><b>Une séance ressource, détend, libère les blocages énergétiques, renforce le système immunitaire, diminue la douleur et élimine les toxines du corps.
                                     <br />Il est évident que rien n'est imposé, ni figé ! Toutes les décisions seront libres et prises par vous !</b></p>
                         </div>
@@ -136,7 +136,7 @@ require_once 'controllers/indexController.php';
                             </div>
                             <div class="card-content">
                                 <p class="<?php if (isset($_SESSION['userLog'])) { ?> truncate <?php } ?>">
-                                        <?= $prestation->prestations_description ?>
+                                    <?= $prestation->prestations_description ?>
                                 </p>
                             </div>
                         </div>
@@ -197,14 +197,19 @@ require_once 'controllers/indexController.php';
             <?php } ?>
         </div>
         <!-- end avis -->
-        <!--coryright-->
-        <div class="container-fluid rem10">
-            2018 - Made by Badik 🖕 with <i class="fas fa-heart red-text rem10"></i>
-        </div>
-        <!--end coryright-->
-        <!--Scripts-->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-        <script src="assets/import/Materialize/js/materialize.min.js"></script>
-        <script src="assets/js/script.js"></script>
-    </body>
-</html>
+<nav class="navbar-fixed footer-copyright black">
+    <div class="container-fluid rem10 nav-wrapper row">        
+        <ul class="left-nav">
+            <li> Copyright © 2018 COVER-DRESSING</li>
+        </ul>
+        <ul class="right">     
+            <li><a href="views/mentionlegale.php">Mentions légales</a></li>
+            <li><a href="views/cgu.php">Conditions Générale d'Utilisation</a></li>
+        </ul>
+    </div>
+</nav>
+<!--end coryright-->
+<!--Scripts-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="assets/import/Materialize/js/materialize.min.js"></script>
+<script src="assets/js/script.js"></script>

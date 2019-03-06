@@ -28,9 +28,11 @@ class daterdv extends database {
     public function addRDV() {
         // Insertion des données du rdv à l'aide d'une requête préparée avec un INSERT INTO et le nom des champs de la table 
         // Insertion des valeurs des variables via les marqueurs nominatifs, ex :dateRDV).
-        $query = 'INSERT INTO `octopus_dateRDV` ( `dateRDV_dateRDV`, `users_id`, `prestations_id`, `timeRDV_id`) '
+        //Nous allons utiliser la fonction prépare pour mettre en place des bindValue pour récupérer les valeurs de l'objet, une fois les valeurs récupérées, nous exécutons la requête.
+        $query = 'INSERT INTO `octopus_dateRDV` ( `dateRDV_dateRDV`, `users_id`, `prestations_id`, `timeRDV_id`)'
                 . 'VALUES (:dateRDV_dateRDV, :users_id, :prestations_id, :timeRDV_id)';
         $addRDV = $this->dataBase->prepare($query);
+        // on attribue les valeurs via bindValue et on récupère les attributs de la classe via $this
         $addRDV->bindValue(':dateRDV_dateRDV', $this->dateRDV_dateRDV, PDO::PARAM_STR);
         $addRDV->bindValue(':users_id', $this->users_id, PDO::PARAM_STR);
         $addRDV->bindValue(':prestations_id', $this->prestations_id, PDO::PARAM_STR);
@@ -65,25 +67,24 @@ class daterdv extends database {
         // On retourne le resultat
         return $resultList;
     }
+
     /**
      * On crée un methode qui retourne la liste des rdv de la table daterdv
      * @return type ARRAY -> WARNING -> is_object ?
      */
     public function showRDVbefore() {
         // On met notre requète dans la variable $query qui selectionne tous les champs de la table Produits
-        $query = 'SELECT `octopus_dateRDV`.`dateRDV_id`,`octopus_dateRDV`.`prestations_id`, `octopus_dateRDV`.`dateRDV_validate`,'
+        $query = 'SELECT `octopus_dateRDV`.`dateRDV_id`, `octopus_dateRDV`.`dateRDV_validate`,'
                 . '`octopus_dateRDV`.`users_id`,`octopus_dateRDV`.`dateRDV_dateRDV`,'
-                . '`octopus_users`.`users_lastname`, `octopus_users`.`users_firstname`,'
-                . '`octopus_users`.`users_phone`,`octopus_timeRDV`.`timeRDV_timeRDV`,'
-                . '`octopus_prestations`.`prestations_id`, `octopus_prestations`.`prestations_name`'
+                . '`octopus_timeRDV`.`timeRDV_timeRDV`,'
+                . '`octopus_prestations`.`prestations_name`'
                 . 'FROM `octopus_dateRDV`'
                 . 'INNER JOIN `octopus_users` ON `octopus_dateRDV`.`users_id` = `octopus_users`.`users_id`'
                 . 'INNER JOIN `octopus_prestations` ON `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
                 . 'INNER JOIN `octopus_timeRDV` ON `octopus_dateRDV`.`timeRDV_id` = `octopus_timeRDV`.`timeRDV_id`'
-                . 'WHERE `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
-                . 'AND `octopus_dateRDV`.`dateRDV_dateRDV` < NOW()'
-                . 'ORDER BY `octopus_dateRDV`.`dateRDV_dateRDV`' //DESC
-                . 'LIMIT 3';
+                . 'WHERE `octopus_users`.`users_id` = `octopus_dateRDV`.`users_id`'
+                . 'OR `octopus_dateRDV`.`dateRDV_dateRDV` <= NOW()'
+                . 'ORDER BY `octopus_dateRDV`.`dateRDV_dateRDV`'; //
         // On crée un objet $result qui exécute la méthode query() avec comme paramètre $query
         $showresult = $this->dataBase->query($query);
         // On crée un objet $resultList qui est un tableau.
@@ -92,6 +93,7 @@ class daterdv extends database {
         // On retourne le resultat
         return $resultList;
     }
+
     /**
      * On crée un methode qui retourne un tableau qui contient les informations d'un rdv selon l'idPresta de la table daterdv
      * @return BOOLEAN
@@ -218,8 +220,8 @@ class daterdv extends database {
         // on utilise la méthode execute() via un return
         return $putRDVvalidate->execute();
     }
-    
-        /*
+
+    /*
      * Création d'une méthode qui archivera le rdv.
      */
 
@@ -235,27 +237,14 @@ class daterdv extends database {
         return $putRDVvalidate->execute();
     }
 
-        public function updaterdv() {
+        public function updaterdv($dateRDV_id, $dateRDV_dateRDV, $timeRDV_id) {
         // MAJ des données de user à l'aide d'une requête préparée avec un UPDATE et le nom des champs de la table
-        // Insertion des valeurs des variables via les marqueurs nominatifs, ex :name).
-        $query = 'UPDATE `octopus_dateRDV` '
-                . 'SET `dateRDV_id`=:dateRDV_id, `dateRDV_dateRDV`=:dateRDV_dateRDV,'
-                . '`dateRDV_validate`=:dateRDV_validate, `users_id`= :users_id,'
-                . '`prestations_id` = :prestations_id, `timeRDV_id` = :timeRDV_id'
-                . 'WHERE `products_id`= :products_id';
-        $updateProd = $this->dataBase->prepare($query);
-        // on attribue les valeurs via bindValue et on recupère les attributs de la classe via $this
-        $updateProd->bindValue(':dateRDV_id', $this->dateRDV_id, PDO::PARAM_INT);
-        $updateProd->bindValue(':dateRDV_dateRDV', $this->dateRDV_dateRDV, PDO::PARAM_STR);
-        $updateProd->bindValue(':dateRDV_validate', $this->dateRDV_validate, PDO::PARAM_STR);
-        $updateProd->bindValue(':users_id', $this->users_id, PDO::PARAM_STR);
-        $updateProd->bindValue(':prestations_id', $this->prestations_id, PDO::PARAM_STR);
-        $updateProd->bindValue(':timeRDV_id', $this->timeRDV_id, PDO::PARAM_STR);
-        // on utilise la méthode execute() via un return
-        return $updateProd->execute();
+        // Insertion des valeurs des variables via ?
+        $query = $this->dataBase->prepare('UPDATE octopus_dateRDV SET dateRDV_dateRDV = ?, timeRDV_id = ? WHERE dateRDV_id = ?');
+                // on utilise la méthode execute() via un return
+        return $query->execute([$dateRDV_dateRDV, $timeRDV_id, $dateRDV_id]);
     }
-  
-    
+
     public function __destruct() {
         // On appelle le destruct du parent
         parent::__destruct();

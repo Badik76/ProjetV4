@@ -1,4 +1,3 @@
-
 <!--controller login-->
 <?php
 require_once '../models/database.php';
@@ -51,11 +50,6 @@ if (count($errorArray) == 0 && isset($_POST['logButton'])) {
     if (is_object($infoUser)) {
         if (password_verify($users_password, $infoUser->users_password)) {
             $_SESSION['users_id'] = $infoUser->users_id;
-            $_SESSION['users_lastname'] = $infoUser->users_lastname;
-            $_SESSION['users_firstname'] = $infoUser->users_firstname;
-            $_SESSION['users_phone'] = $infoUser->users_phone;
-            $_SESSION['users_email'] = $infoUser->users_email;
-            $_SESSION['users_birthdate'] = $infoUser->users_birthdate;
             $_SESSION['typeUsers_id'] = $infoUser->typeUsers_id;
             $_SESSION['userLog'] = true;
 

@@ -1,6 +1,7 @@
 body {
     font-family: 'Thasadith', sans-serif;
     background-color: #fcfcfc;
+    padding-bottom: 55px;
 }
 #logonavmob {
     width: 50px;
@@ -23,6 +24,17 @@ legend {
     margin: 1.0933333333rem 0 .656rem 0;
     color : #4db6ac;
 }
+.footer-copyright {
+    position: fixed;
+    bottom: 0;        
+}
+#MODAL1 {
+    min-height: 50px;
+    width: auto;
+}
+.error {
+    color: red;
+}
 
 .center {
     text-align: center;
@@ -43,7 +55,9 @@ h2 {
 .backgroundcolor {
     background-color: #4db6ac;
 }
-
+.collapsible-header i {
+    margin: 1rem;
+}
 .responsive-img-products {
     max-width: auto;
     height:300px;

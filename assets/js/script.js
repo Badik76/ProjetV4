@@ -5,7 +5,6 @@ $('.collapsible').collapsible();
 $('.modal').modal();
 $('.sidenav').sidenav();
 $(".dropdown-trigger").dropdown();
-$(".buttoncollapse").sidenav();
 // carou
 $('.carousel.carousel-slider').carousel({
     fullWidth: true,

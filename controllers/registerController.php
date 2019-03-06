@@ -1,4 +1,3 @@
-
 <!--controller register-->
 <?php
 require_once '../models/database.php';

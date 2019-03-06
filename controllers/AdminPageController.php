@@ -40,7 +40,7 @@ $commentsList = $comments->showComment2();
 //déclaration des regexs   
 $regexName = '/^[A-z\'\- 0-9]{1,}$/';
 $regexImage = '/[^\s]+(\.(?i)(jpg|png|gif|bmp|jpeg))$/';
-$regexDescri = '/^[A-z\'\- 0-9]{1,}$/';
+$regexDescri = '/^.{1,}$/';
 $regexPrix = '/^[0-9]{1,6}$/';
 // créa tableau pour error
 $errorArray = [];

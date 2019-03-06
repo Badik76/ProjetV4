@@ -7,7 +7,7 @@ if (isset($_SESSION['users_id'])) {
     $_SESSION['users_phone'] = $req->users_phone;
     $_SESSION['users_email'] = $req->users_email;
     $_SESSION['users_birthdate'] = $req->users_birthdate;
-    $_SESSION['typeUsers_id'] = $req->typeUsers_id;    
+    $_SESSION['typeUsers_id'] = $req->typeUsers_id;
 }
 ?>
 
@@ -37,9 +37,15 @@ if (isset($_SESSION['users_id'])) {
                     <ul id="left-nav" class="left hide-on-med-and-down">
                         <li><a href="../index.php"><b>Wellness Reiki</b></a></li>
                     </ul>  
+                    <ul class="right hide-on-med-and-up show-on-medium-and-down">
+                        <li><a data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
+                    </ul>
                     <ul id="right-nav" class="right hide-on-med-and-down">
                         <li><a href="product.php?productCategory_id=1">Produits</a></li>
                         <li><a href="learnmore.php">Plus d'Info</a></li>
+                        <ul class="right hide-on-med-and-up show-on-medium-and-down">
+                            <li><a data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
+                        </ul>
                         <?php if (isset($_SESSION['userLog'])) { ?> 
                             <li><a href="userPage.php">Mon Espace</a></li>
                             <?php
@@ -54,23 +60,27 @@ if (isset($_SESSION['users_id'])) {
                             <li><a href="logout.php">Déconnexion</a></li> 
 
                         <?php } else {
-                            ?><!-- Dropdown Structure -->
-                            <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Espace Client<i class="material-icons right">arrow_drop_down</i></a></li>
-                        </ul>
-                        <ul class="right hide-on-med-and-up show-on-medium-and-down">
-                            <li><a data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
-                        </ul>
-                        <?php
-                    }
-                    ?>  
+                            ?>
+                            <!-- Dropdown Structure -->
+                            <li>
+                                <a class="dropdown-trigger" href="#!" data-target="dropdown1">Espace Client
+                                    <i class="material-icons right">arrow_drop_down</i>
+                                </a>
+                            </li>
+
+                            <?php
+                        }
+                        ?>
+                    </ul> 
                 </div>
             </nav>
-            <ul id="dropdown1" class="dropdown-content">
-                <li><a class="waves-effect waves-light" href="register.php">Inscription</a></li>
-                <li class="divider"></li>
-                <li><a class="waves-effect waves-light" href="login.php">Connexion</a></li>
-            </ul>   
         </div>
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a class="waves-effect waves-light" href="register.php">Inscription</a></li>
+            <li class="divider"></li>
+            <li><a class="waves-effect waves-light" href="login.php">Connexion</a></li>
+        </ul>   
+
         <ul id="slide-out" class="sidenav">          
             <li><a class="subheader"><img  id="logonavmob" src="../assets/img/logo.png">Wellness Reiki</a></li>
             <li><div class="divider"></div></li>

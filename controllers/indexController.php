@@ -1,4 +1,4 @@
-<!--controller register-->
+<!--controller index-->
 <?php
 require_once 'models/database.php';
 require_once 'models/users.php';
@@ -49,8 +49,11 @@ if (isset($_POST['dateRDV_dateRDV'])) {
     if (empty($_POST['dateRDV_dateRDV'])) {
         // je crée le message d'erreur suivant dans le tableau d'erreur
         $errorArray['dateRDV_dateRDV'] = '*Champs date obligatoire';
+    } 
+     if (strtotime('today') < strtotime($_POST['dateRDV_dateRDV'])) {
+        $errorArray['dateRDV_dateRDV'] = 'La date est invalide.';
     }
-}
+   }
 
 //On test la valeur idTimeRDV l'array $_POST pour savoir si elle existe
 //Si nous attribuons à idTimeRDV la valeur du $_POST
