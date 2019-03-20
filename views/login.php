@@ -6,7 +6,7 @@ require_once '../controllers/loginController.php';
 <!DOCTYPE html>
 <html lang="fr">
     <?php    include_once '../includes/header.php'; ?>
-        <div id="logUser" class="card-panel">                
+        <div id="logUser" class="container card-panel">               
             <?php if ($logError) { ?>
                 <h2 class="center"> Erreur de connexion ! </h2>
             <?php } if (isset($_SESSION['userLog'])) { ?>
@@ -17,11 +17,11 @@ require_once '../controllers/loginController.php';
                 }
             } else {
                 ?>
-                <form  action="login.php" method="POST">
+                    <form  action="login.php" method="POST" novalidate="">
                     <fieldset>
                         <legend>Connexion</legend>
                         <div>
-                            <label for="users_email">Email : (ex: mail@mail.fr)</label>
+                            <label for="users_email">Email : (ex: monemail@fournisseur.ext)</label>
                             <div>
                                 <span class="error"><?= isset($errorArray['users_email']) ? $errorArray['users_email'] : ''; ?></span>
                             </div>   
@@ -37,7 +37,7 @@ require_once '../controllers/loginController.php';
                         <div class="modal-footer">
                             <label for="remember">Se souvenir de moi ? </label>
                             <input type="checkbox" checked="checked" name="remember" id="remember" class="filled-in" />
-                            <input type="submit" class="btn" name="logButton" value="Se connecter" />
+                            <input type="submit" class="btn right" name="logButton" value="Se connecter" />
                         </div>
                     </fieldset>
                 </form>

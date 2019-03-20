@@ -45,14 +45,14 @@ class comments extends database {
     public function showComment() {
         // On met notre requète dans la variable $query qui selectionne tous les champs de la table Produits
         $query = 'SELECT `octopus_comments`.`comments_id`, `octopus_comments`.`comments_comment`,'
-                . '`octopus_dateRDV`.`dateRDV_dateRDV`, `octopus_prestations`.`prestations_name`,'
+                . 'DATE_FORMAT(`octopus_dateRDV`.`dateRDV_dateRDV`, "%d/%m/%Y") AS `dateRDV_dateRDV`, `octopus_prestations`.`prestations_name`,'
                 . '`octopus_users`.`users_lastname`, `octopus_users`.`users_firstname`'
                 . 'FROM `octopus_comments`'
                 . 'INNER JOIN `octopus_users` ON `octopus_comments`.`users_id` = `octopus_users`.`users_id`'
                 . 'INNER JOIN `octopus_dateRDV` ON `octopus_comments`.`dateRDV_id` = `octopus_dateRDV`.`dateRDV_id`'
                 . 'INNER JOIN `octopus_prestations` ON `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
                 . 'WHERE `octopus_comments`.`users_id` = `octopus_users`.`users_id` '
-                . 'ORDER BY `octopus_dateRDV`.`users_id`';
+                . 'ORDER BY `octopus_dateRDV`.`dateRDV_dateRDV`';
         // On crée un objet $result qui exécute la méthode query() avec comme paramètre $query
         $showresult = $this->dataBase->query($query);
         // On crée un objet $resultList qui est un tableau.
@@ -61,20 +61,21 @@ class comments extends database {
         // On retourne le resultat
         return $commentsList;
     }
-    
-       /**
+
+    /**
      * On crée un methode qui retourne la liste des rdv de la table daterdv
      * @return type ARRAY -> WARNING -> is_object ?
      */
     public function showComment2() {
         // On met notre requète dans la variable $query qui selectionne tous les champs de la table Produits
         $query = 'SELECT `octopus_comments`.`comments_id`, `octopus_comments`.`comments_comment`,'
-                . '`octopus_dateRDV`.`dateRDV_dateRDV`, `octopus_prestations`.`prestations_name`,'
-                . '`octopus_users`.`users_lastname`, `octopus_users`.`users_firstname`'
+                . 'DATE_FORMAT(`octopus_dateRDV`.`dateRDV_dateRDV`, "%d/%m/%Y") AS `dateRDV_dateRDV`, `octopus_prestations`.`prestations_name`,'
+                . '`octopus_users`.`users_lastname`, `octopus_users`.`users_firstname`, `octopus_users`.`users_id`'
                 . 'FROM `octopus_comments`'
                 . 'INNER JOIN `octopus_users` ON `octopus_comments`.`users_id` = `octopus_users`.`users_id`'
                 . 'INNER JOIN `octopus_dateRDV` ON `octopus_comments`.`dateRDV_id` = `octopus_dateRDV`.`dateRDV_id`'
-                . 'INNER JOIN `octopus_prestations` ON `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`';
+                . 'INNER JOIN `octopus_prestations` ON `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
+                . 'WHERE `octopus_dateRDV`.`dateRDV_id` = `octopus_comments`.`dateRDV_id`';
         // On crée un objet $result qui exécute la méthode query() avec comme paramètre $query
         $showresult = $this->dataBase->query($query);
         // On crée un objet $resultList qui est un tableau.
@@ -83,6 +84,7 @@ class comments extends database {
         // On retourne le resultat
         return $commentsList;
     }
+
     /**
      * On crée un methode qui supprime une ligne de la table ainsi que les lignes de la table appointments associée
      * Contrôle de la QUERY via un commit et rollback
@@ -133,9 +135,8 @@ class comments extends database {
             $this->dataBase->rollback();
             echo 'Erreur : ' . $errorMessage->getMessage(); // On affiche le message d'erreur avec la methode getMessage
         }
-    }    
-    
-    
+    }
+
     public function __destruct() {
         // On appelle le destruct du parent
         parent::__destruct();

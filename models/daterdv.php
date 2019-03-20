@@ -48,7 +48,7 @@ class daterdv extends database {
     public function showRDV() {
         // On met notre requète dans la variable $query qui selectionne tous les champs de la table Produits
         $query = 'SELECT `octopus_dateRDV`.`dateRDV_id`,`octopus_dateRDV`.`prestations_id`,'
-                . '`octopus_dateRDV`.`users_id`,`octopus_dateRDV`.`dateRDV_dateRDV`,'
+                . '`octopus_dateRDV`.`users_id`,DATE_FORMAT(`octopus_dateRDV`.`dateRDV_dateRDV`, "%d/%m/%Y") AS `dateRDV_dateRDV`,'
                 . '`octopus_users`.`users_lastname`, `octopus_users`.`users_firstname`,'
                 . '`octopus_users`.`users_phone`,`octopus_timeRDV`.`timeRDV_timeRDV`,'
                 . '`octopus_prestations`.`prestations_id`, `octopus_prestations`.`prestations_name`'
@@ -57,7 +57,6 @@ class daterdv extends database {
                 . 'INNER JOIN `octopus_prestations` ON `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
                 . 'INNER JOIN `octopus_timeRDV` ON `octopus_dateRDV`.`timeRDV_id` = `octopus_timeRDV`.`timeRDV_id`'
                 . 'WHERE `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
-                . 'AND `octopus_dateRDV`.`dateRDV_dateRDV` > NOW()'
                 . 'ORDER BY `octopus_dateRDV`.`prestations_id`';
         // On crée un objet $result qui exécute la méthode query() avec comme paramètre $query
         $showresult = $this->dataBase->query($query);
@@ -72,22 +71,23 @@ class daterdv extends database {
      * On crée un methode qui retourne la liste des rdv de la table daterdv
      * @return type ARRAY -> WARNING -> is_object ?
      */
-    public function showRDVbefore() {
+    public function showRDVbefore($users_id) {
         // On met notre requète dans la variable $query qui selectionne tous les champs de la table Produits
         $query = 'SELECT `octopus_dateRDV`.`dateRDV_id`, `octopus_dateRDV`.`dateRDV_validate`,'
-                . '`octopus_dateRDV`.`users_id`,`octopus_dateRDV`.`dateRDV_dateRDV`,'
+                . '`octopus_dateRDV`.`users_id`, DATE_FORMAT(`dateRDV_dateRDV`, "%d/%m/%Y") AS `dateRDV_dateRDV`,'
                 . '`octopus_timeRDV`.`timeRDV_timeRDV`,'
                 . '`octopus_prestations`.`prestations_name`'
                 . 'FROM `octopus_dateRDV`'
                 . 'INNER JOIN `octopus_users` ON `octopus_dateRDV`.`users_id` = `octopus_users`.`users_id`'
                 . 'INNER JOIN `octopus_prestations` ON `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
                 . 'INNER JOIN `octopus_timeRDV` ON `octopus_dateRDV`.`timeRDV_id` = `octopus_timeRDV`.`timeRDV_id`'
-                . 'WHERE `octopus_users`.`users_id` = `octopus_dateRDV`.`users_id`'
-                . 'OR `octopus_dateRDV`.`dateRDV_dateRDV` <= NOW()'
+                . 'WHERE `octopus_dateRDV`.`users_id` = `octopus_users`.`users_id`'
+                . 'AND `octopus_dateRDV`.`dateRDV_dateRDV` <= NOW()'
                 . 'ORDER BY `octopus_dateRDV`.`dateRDV_dateRDV`'; //
         // On crée un objet $result qui exécute la méthode query() avec comme paramètre $query
-        $showresult = $this->dataBase->query($query);
+        $showresult = $this->dataBase->prepare($query);
         // On crée un objet $resultList qui est un tableau.
+        $showresult->execute(array($users_id));
         // La fonction fetchAll permet d'afficher toutes les données de la requète dans un tableau d'objet via le paramètre (PDO::FETCH_OBJ)
         $resultList = $showresult->fetchAll(PDO::FETCH_OBJ);
         // On retourne le resultat
@@ -98,7 +98,7 @@ class daterdv extends database {
      * On crée un methode qui retourne un tableau qui contient les informations d'un rdv selon l'idPresta de la table daterdv
      * @return BOOLEAN
      */
-    public function getRDVByidUser() {
+    public function getRDVByidUser($users_id) {
         // On met notre requète dans la variable $query qui selectionne tous les champs de la table users l'id est egal à :id via marqueur nominatif sur id
         $query = 'SELECT `octopus_dateRDV`.`dateRDV_id`, `octopus_dateRDV`.`users_id`, `octopus_dateRDV`.`dateRDV_validate`,'
                 . '`octopus_dateRDV`.`timeRDV_id`, `octopus_dateRDV`.`prestations_id`,'
@@ -108,19 +108,21 @@ class daterdv extends database {
                 . 'INNER JOIN `octopus_users` ON `octopus_dateRDV`.`users_id` = `octopus_users`.`users_id`'
                 . 'INNER JOIN `octopus_prestations` ON `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
                 . 'INNER JOIN `octopus_timeRDV` ON `octopus_dateRDV`.`timeRDV_id` = `octopus_timeRDV`.`timeRDV_id`'
-                . 'WHERE `octopus_dateRDV`.`users_id` = :users_id ';
+                . 'WHERE `octopus_dateRDV`.`users_id` = ?'
+                . 'AND `octopus_dateRDV`.`dateRDV_dateRDV` > NOW()'
+                . 'ORDER BY `octopus_dateRDV`.`prestations_id`';
         // On crée un objet $findProfil qui utilise la fonction prepare avec comme paramètre $query        
         $result = $this->dataBase->prepare($query);
         // on attribue la valeur via bindValue et on recupère les attributs de la classe via $this
-        $result->bindValue(':users_id', $this->users_id, PDO::PARAM_INT);
-        $result->execute();
+//        $result->bindValue(':users_id', $this->users_id, PDO::PARAM_INT);
+        $result->execute(array($users_id));
         // On crée un objet $resultList qui est un tableau.
         // La fonction fetchAll permet d'afficher toutes les données de la requète dans un tableau d'objet via le paramètre (PDO::FETCH_OBJ)
         $rdvidUserList = $result->fetchAll(PDO::FETCH_OBJ);
         return $rdvidUserList;
     }
 
-    public function getRDVByid() {
+    public function getRDVByid($users_id) {
         $rdvFind = false;
         // On met notre requète dans la variable $query qui selectionne tous les champs de la table users l'id est egal à :id via marqueur nominatif sur id
         $query = 'SELECT `octopus_dateRDV`.`dateRDV_id`, `octopus_dateRDV`.`users_id`, `octopus_dateRDV`.`dateRDV_validate`,'
@@ -131,11 +133,11 @@ class daterdv extends database {
                 . 'INNER JOIN `octopus_users` ON `octopus_dateRDV`.`users_id` = `octopus_users`.`users_id`'
                 . 'INNER JOIN `octopus_prestations` ON `octopus_dateRDV`.`prestations_id` = `octopus_prestations`.`prestations_id`'
                 . 'INNER JOIN `octopus_timeRDV` ON `octopus_dateRDV`.`timeRDV_id` = `octopus_timeRDV`.`timeRDV_id`'
-                . 'WHERE `octopus_dateRDV`.`users_id` = :users_id';
+                . 'WHERE `octopus_dateRDV`.`users_id` = ? ';
         // On crée un objet $findProfil qui utilise la fonction prepare avec comme paramètre $query        
         $result = $this->dataBase->prepare($query);
-        $result->bindValue(':users_id', $this->users_id, PDO::PARAM_INT);
-        if ($result->execute()) {
+//        $result->bindValue(':users_id', $this->users_id, PDO::PARAM_INT); 
+        if ($result->execute(array($users_id))) {
             $profil = $result->fetch(PDO::FETCH_OBJ);
             // if imbriqué pour hydrater les valeurs
             // si $profil est un objet(existe dans la table), on attribue directement les valeurs de l'objet $profil
@@ -225,23 +227,21 @@ class daterdv extends database {
      * Création d'une méthode qui archivera le rdv.
      */
 
-    public function putRDVarchivate() {
+    public function putRDVarchivate($dateRDV_id) {
         // Insertion des données du patient à l'aide d'une requête préparée avec un INSERT INTO et le nom des champs de la table
         // Insertion des valeurs des variables via les marqueurs nominatifs, ex :lastname).
         $query = 'UPDATE `octopus_dateRDV` SET `dateRDV_validate` = 0 '
-                . 'WHERE `dateRDV_id`=:dateRDV_id';
+                . 'WHERE `dateRDV_id`= ?';
         $putRDVvalidate = $this->dataBase->prepare($query);
-        // on attribue les valeurs via bindValue et on recupère les attributs de la classe via $this
-        $putRDVvalidate->bindValue(':dateRDV_id', $this->dateRDV_id, PDO::PARAM_INT);
         // on utilise la méthode execute() via un return
-        return $putRDVvalidate->execute();
+        return $putRDVvalidate->execute(array($dateRDV_id));
     }
 
-        public function updaterdv($dateRDV_id, $dateRDV_dateRDV, $timeRDV_id) {
+    public function updaterdv($dateRDV_id, $dateRDV_dateRDV, $timeRDV_id) {
         // MAJ des données de user à l'aide d'une requête préparée avec un UPDATE et le nom des champs de la table
         // Insertion des valeurs des variables via ?
         $query = $this->dataBase->prepare('UPDATE octopus_dateRDV SET dateRDV_dateRDV = ?, timeRDV_id = ? WHERE dateRDV_id = ?');
-                // on utilise la méthode execute() via un return
+        // on utilise la méthode execute() via un return
         return $query->execute([$dateRDV_dateRDV, $timeRDV_id, $dateRDV_id]);
     }
 

@@ -49,23 +49,21 @@ if (isset($_POST['dateRDV_dateRDV'])) {
     if (empty($_POST['dateRDV_dateRDV'])) {
         // je crée le message d'erreur suivant dans le tableau d'erreur
         $errorArray['dateRDV_dateRDV'] = '*Champs date obligatoire';
-    } 
-     if (strtotime('today') < strtotime($_POST['dateRDV_dateRDV'])) {
+    }
+    if (strtotime('today') < strtotime($_POST['dateRDV_dateRDV'])) {
         $errorArray['dateRDV_dateRDV'] = 'La date est invalide.';
     }
-   }
+}
 
 //On test la valeur idTimeRDV l'array $_POST pour savoir si elle existe
 //Si nous attribuons à idTimeRDV la valeur du $_POST
 if (isset($_POST['timeRDV_id'])) {
-    $timerdv->timeRDV_id = $_POST['timeRDV_id'];
     // OU si le formulaire a été validé mais que il n'y a pas d'élément sélectionné dans le menu déroulant
     // on crée un message d'erreur pour pouvoir l'afficher
-    if (is_nan($timerdv->timeRDV_id)) {
-        $errorArray['timeRDV_id'] = '*Veuillez sélectionner uniquement une heure de la liste';
+    if (empty($_POST['timeRDV_id'])) {
+        // je crée le message d'erreur suivant dans le tableau d'erreur
+        $errorArray['timeRDV_id'] = '*Champs date obligatoire';
     }
-} else if (isset($_POST['addButton']) && !array_key_exists('timeRDV_id', $_POST)) {
-    $errorArray['timeRDV_id'] = '*Veuillez sélectionner une heure';
 }
 
 // On compte le nombre de valeur dans $formError et On vérifie que nous avons crée une entrée addButton dans l'array $_POST,
@@ -84,5 +82,6 @@ if (count($errorArray) == 0 && isset($_POST['addButton']) && isset($_GET['presta
     } else {
         // sinon, on execute notre requête pour enregistrer le RDV
         $addRDVSuccess = true;
+        header('http://proprojetpro/index.php');
     }
 }

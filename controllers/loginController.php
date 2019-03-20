@@ -21,6 +21,7 @@ $isSuperUser = false;
 $isAdmin = false;
 $userLog = false;
 $logError = false;
+$EspCPageTrue = 'active';
 
 //On test la valeur email dans l'array $_POST, si elle existe via premier if
 if (isset($_POST['users_email'])) {
@@ -52,15 +53,6 @@ if (count($errorArray) == 0 && isset($_POST['logButton'])) {
             $_SESSION['users_id'] = $infoUser->users_id;
             $_SESSION['typeUsers_id'] = $infoUser->typeUsers_id;
             $_SESSION['userLog'] = true;
-
-//            $req = $dataBase->prepare('SELECT * FROM octopus_users WHERE id = ?');
-//            $req->execute([$id]);
-//            if($req->rowCount()) {
-//                    
-//            $_SESSION['auth'] = $req->fetch();
-//                
-//            }
-//            
         }
     } else {
         session_destroy();

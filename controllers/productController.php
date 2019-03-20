@@ -12,6 +12,8 @@ $productcategory = new productcategory();
 // On instancie un nouvel $products objet comme classe products
 $products = new products();
 
+$productPageTrue = 'active';
+
 // j'attribue la valeur du valeur $_GET à l'attribue idProdCat de l'objet $users et l'attribue idUser de l'objet $daterdv
 if (isset($_GET['productCategory_id'])) {
     $products->productCategory_id = $_GET['productCategory_id'];

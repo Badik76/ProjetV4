@@ -17,14 +17,14 @@ require_once '../controllers/registerController.php';
                     <fieldset>
                         <legend>Inscription</legend>
                         <div>
-                            <label for="users_lastname">Nom : (DelaMolleFesse)</label>
+                            <label for="users_lastname">Nom : (ex: Dupont)</label>
                             <div>
                                 <span class="error"><?= isset($errorArray['users_lastname']) ? $errorArray['users_lastname'] : ''; ?></span>
                             </div>
                             <input name="users_lastname" type="text" id="users_lastname" required class="validate" value="<?= isset($_POST['users_lastname']) ? $_POST['users_lastname'] : ''; ?>" pattern="[a-zA-Zàáâãäåçèéêëìíîïðòóôõöùúûüýÿ-]+"  />
                         </div>
                         <div>
-                            <label for="users_firstname">Prénom : (ex: Jean-Edouard)</label>
+                            <label for="users_firstname">Prénom : (ex: Jean)</label>
                             <div>
                                 <span class="error"><?= isset($errorArray['users_firstname']) ? $errorArray['users_firstname'] : ''; ?></span>
                             </div>
@@ -38,7 +38,7 @@ require_once '../controllers/registerController.php';
                             <input id="users_phone" name="users_phone" type="tel" class="validate" required pattern="((\+)33|0)[1-9](\d{2}){4}" value="<?= isset($_POST['users_phone']) ? $_POST['users_phone'] : ''; ?>" />
                         </div>
                         <div>
-                            <label for="users_email">Email : (ex: mail@mail.fr)</label>
+                            <label for="users_email">Email : (ex: monemail@fournisseur.ext)</label>
                             <div>
                                 <span class="error"><?= isset($errorArray['users_email']) ? $errorArray['users_email'] : ''; ?></span>
                             </div>   

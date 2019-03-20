@@ -6,9 +6,7 @@
         <h3>1. Présentation du site.</h3>
         <p>En vertu de l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, il est précisé aux utilisateurs du site <a href="http://www.wellnessreiki.com/">www.wellnessreiki.com</a> l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi :</p>
         <p><strong>Propriétaire</strong> : Priscilla Minard –  – Lillebonne<br />
-            <strong>Créateur</strong>  : <a href="www.wellnessreiki.com">Karl Levasseur</a><br />
-            <strong>Responsable publication</strong> : Karl Levasseur – contact@wellnessreiki.com<br />
-            Le responsable publication est une personne physique ou une personne morale.<br />
+            <strong>Créateur</strong>  : Priscilla Minard<br />
             <strong>Webmaster</strong> : Karl Levasseur – levasseurkarl@gmail.com<br />
             <strong>Hébergeur</strong> : OVH – OVH, 2 rue Kellermann – 59100 Roubaix – France<br />
         <h3>2. Conditions générales d’utilisation du site et des services proposés.</h3>

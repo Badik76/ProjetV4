@@ -29,32 +29,33 @@ if (isset($_SESSION['users_id'])) {
     $users->users_id = $_SESSION['users_id'];
     $daterdv->users_id = $_SESSION['users_id'];
     $comments->users_id = $_SESSION['users_id'];
+    /* on execute la méthode getProfilById qui va hydrater les valeurs dans patients
+     * elle va également nous retourner un boolean qui nous indiquera si la requête s'est bien executée
+     */
+    $userIsFind = $users->getUsersById($_SESSION['users_id']);
+
+    $rdvFind = $daterdv->getRDVByid($_SESSION['users_id']);
+
+    $showrdv = $daterdv->showRDVbefore($_SESSION['users_id']);
 }
-/* on execute la méthode getProfilById qui va hydrater les valeurs dans patients
- * elle va également nous retourner un boolean qui nous indiquera si la requête s'est bien executée
- */
-$userIsFind = $users->getUsersById();
 /* on execute la méthode getRDVByidUser qui va hydrater les valeurs dans daterdv
  * elle va également nous retourner un boolean qui nous indiquera si la requête s'est bien executée
  */
-$rdvidUserList = $daterdv->getRDVByidUser();
-$rdvFind = $daterdv->getRDVByid();
+$rdvidUserList = $daterdv->getRDVByidUser($_SESSION['users_id']);
 // On appel la methode ShowTimeRDV dans l'objet $showTimeRDV
 $showTimeRDV = $timerdv->ShowTimeRDV();
-
-$showrdv = $daterdv->showRDVbefore();
 
 //déclaration des regexs   
 $regexName = '/^[a-zA-Zàáâãäåçèéêëìíîïðòóôõöùúûüýÿ-]+$/';
 $regexBirthdate = '/^(0[1-9]|([1-2][0-9])|3[01])\/(0[1-9]|1[012])\/((19|20)[0-9]{2})$/'; // regex date au format yyyy-mm-dd
 //Création des regex pour controler les données du formulaire
 $regexDate = '/^(0[1-9]|([1-2][0-9])|3[01])\/(0[1-9]|1[012])\/((19|20)[0-9]{2})$/';
-$regexEmail = '/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,6}$/';
 $regexPhoneNumber = '/^[0-9]{10,10}$/';
 $regexPassword = "/^.{6,}+$/";
 $regexDescri = '/^[A-zÄ-ẑ\'\- \. \ 0-9]{1,}$/';
 // créa tableau pour error
 $errorArray = [];
+$userPageTrue = 'active';
 //Initialise $addSuccess en False pour afficher message
 $addSuccess = false;
 //Initialise $HadAppointments en False pour afficher message
@@ -82,6 +83,7 @@ if (!empty($_GET['deleteThis'])) {
     $users->users_id = htmlspecialchars($_GET['deleteThis']);
     $users->deleteUser();
     $deleteOk = true;
+    session_unset();
 }
 //On test la valeur lastname dans l'array $_POST, si elle existe via premier if
 if (isset($_POST['users_lastname'])) {
@@ -141,14 +143,14 @@ if (isset($_POST['users_phone'])) {
 //On test la valeur email dans l'array $_POST, si elle existe via premier if
 if (isset($_POST['users_email'])) {
     // Variable mail qui vérifie que les caractères speciaux soit converties en entité html
-    $users_email = $_POST['users_email'];
+    $users->users_email = filter_var($_POST['users_email'], FILTER_SANITIZE_EMAIL);
     // On test que la variable n'est pas égale à la regeX
-    if (!preg_match($regexEmail, $users_email)) {
+    if (!filter_var($users->users_email, FILTER_VALIDATE_EMAIL)) {
         // J'affiche l'erreur
         $errorArray['users_email'] = 'Votre mail doit être du type mail@mail.com';
     }
     // Si le post est vide
-    if (empty($users_email)) {
+    if (empty($users->users_email)) {
         // J'affiche le message d'erreur
         $errorArray['users_email'] = 'Champs obligatoire';
     }
@@ -160,6 +162,7 @@ if (count($errorArray) == 0 && isset($_POST['updateButton'])) {
         $errorArray['update'] = 'La mise à jour à échoué';
     } else {
         $addSuccess = true;
+        header('http://proprojetpro/views/userPage.php');
     }
 }
 //commentaires
@@ -178,14 +181,15 @@ if (isset($_POST['comments_comment'])) {
         $errorArray['comments_comment'] = 'Champs obligatoire';
     }
 }
-if (count($errorArray) == 0 && isset($_POST['addComment'])) {
-    $comments->dateRDV_id = $daterdv->dateRDV_id;
+if (count($errorArray) == 0 && isset($_POST['addComment']) && isset($_GET['addComment'])) {
+    $comments->dateRDV_id = htmlspecialchars($_GET['addComment']);
     $comments->users_id = $_SESSION['users_id'];
     if (!$comments->addComment()) {
-        $errorArray['add'] = 'l\'envoie du formulaire à échoué';
+        $errorArray['add'] = 'l\'envoie du commentaire à échoué';
     } else {
         $addCommentSuccess = true;
-        $daterdv->putRDVarchivate();
+        $daterdv->putRDVarchivate($_GET['addComment']);
+        header('http://proprojetpro/views/userPage.php');
     }
 }
 
@@ -211,16 +215,12 @@ if (isset($_POST['dateRDV_dateRDV'])) {
 //On test la valeur idTimeRDV l'array $_POST pour savoir si elle existe
 //Si nous attribuons à idTimeRDV la valeur du $_POST
 if (isset($_POST['timeRDV_id'])) {
-    $time = $_POST['timeRDV_id'];
     // OU si le formulaire a été validé mais que il n'y a pas d'élément sélectionné dans le menu déroulant
     // on crée un message d'erreur pour pouvoir l'afficher
-    if (is_nan($time)) {
-        $errorArray['timeRDV_id'] = '*Veuillez sélectionner uniquement une heure de la liste';
+    if (empty($_POST['timeRDV_id'])) {
+        // je crée le message d'erreur suivant dans le tableau d'erreur
+        $errorArray['timeRDV_id'] = '*Champs date obligatoire';
     }
-} elseif (isset($_POST['timeRDV_id']) && !array_key_exists('timeRDV_id', $_POST)) {
-    $errorArray['timeRDV_id'] = '*Veuillez sélectionner une heure';
-} else {
-    $errorArray['timeRDV_id'] = '*Erreur interne...';
 }
 
 if (count($errorArray) == 0 && isset($_GET['dateRDV_id']) && isset($_POST['updateRDVButton'])) {
@@ -233,6 +233,7 @@ if (count($errorArray) == 0 && isset($_GET['dateRDV_id']) && isset($_POST['updat
         $errorArray['update'] = 'La mise à jour à échoué';
     } else {
         $upRDVSuccess = true;
+        header('http://proprojetpro/views/userPage.php');
     }
 }
 
@@ -244,6 +245,7 @@ if (!empty($_GET['DeleteRDV'])) {
     $daterdv->users_id = $_SESSION['users_id'];
     $daterdv->deleteRDVbyID();
     $daterdvDEL = true;
+    header('http://proprojetpro/views/userPage.php');
 }
 
 //on compte l'array $appointmentsList pour savoir s'il est vide, si vide on donne la valeur true à $NoAppointment

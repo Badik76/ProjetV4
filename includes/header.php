@@ -23,6 +23,7 @@ if (isset($_SESSION['users_id'])) {
     <link href="https://fonts.googleapis.com/css?family=Thasadith" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="../assets/import/Materialize/css/materialize.min.css"  media="screen" />
+    <link type="text/css" rel="stylesheet" href="../assets/import/SweetAlert2/sweetalert2.min.css"  media="screen" />
     <!-- Import personnal stylesheet -->
     <link type="text/css" rel="stylesheet" href="../assets/css/style.css" />
     <!--Let browser know website is optimized for mobile-->
@@ -33,26 +34,21 @@ if (isset($_SESSION['users_id'])) {
         <div class="navbar-fixed">
             <nav class="backgroundcolor">
                 <div class="nav-wrapper">
-                    <a href="../index.php"><img src="../assets/img/logo.png" class="logo left" alt="logo" title="logo" /></a>
-                    <ul id="left-nav" class="left hide-on-med-and-down">
+                    <a href="../index.php#!"><img src="../assets/img/logo.png" class="logo left" alt="logo" title="logo" /></a>
+                    <a href="../index.php#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+                    <ul class="left hide-on-med-and-down">
                         <li><a href="../index.php"><b>Wellness Reiki</b></a></li>
-                    </ul>  
-                    <ul class="right hide-on-med-and-up show-on-medium-and-down">
-                        <li><a data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
-                    </ul>
-                    <ul id="right-nav" class="right hide-on-med-and-down">
-                        <li><a href="product.php?productCategory_id=1">Produits</a></li>
-                        <li><a href="learnmore.php">Plus d'Info</a></li>
-                        <ul class="right hide-on-med-and-up show-on-medium-and-down">
-                            <li><a data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
-                        </ul>
+                    </ul> 
+                    <ul class="right hide-on-med-and-down">
+                        <li class="<?= isset($productPageTrue) ? $productPageTrue : '' ?>"><a href="product.php?productCategory_id=1">Produits</a></li>
+                        <li class="<?= isset($learnMorePageTrue) ? $learnMorePageTrue : '' ?>"><a href="learnmore.php">Plus d'Info</a></li>                        
                         <?php if (isset($_SESSION['userLog'])) { ?> 
-                            <li><a href="userPage.php">Mon Espace</a></li>
+                            <li class="<?= isset($userPageTrue) ? $userPageTrue : '' ?>"><a href="userPage.php">Mon Espace</a></li>
                             <?php
                         }
                         if (isset($_SESSION['isAdmin'])) {
                             ?>                                
-                            <li><a href="AdminPage.php">PanelAdmin</a></li>
+                            <li class="<?= isset($adminPageTrue) ? $adminPageTrue : '' ?>"><a href="AdminPage.php">PanelAdmin</a></li>
                             <?php
                         }
                         if (isset($_SESSION['userLog'])) {
@@ -62,7 +58,7 @@ if (isset($_SESSION['users_id'])) {
                         <?php } else {
                             ?>
                             <!-- Dropdown Structure -->
-                            <li>
+                            <li class="<?= isset($EspCPageTrue) ? $EspCPageTrue : '' ?>">
                                 <a class="dropdown-trigger" href="#!" data-target="dropdown1">Espace Client
                                     <i class="material-icons right">arrow_drop_down</i>
                                 </a>
@@ -71,22 +67,23 @@ if (isset($_SESSION['users_id'])) {
                             <?php
                         }
                         ?>
-                    </ul> 
+                    </ul>
                 </div>
             </nav>
         </div>
+
         <ul id="dropdown1" class="dropdown-content">
             <li><a class="waves-effect waves-light" href="register.php">Inscription</a></li>
             <li class="divider"></li>
             <li><a class="waves-effect waves-light" href="login.php">Connexion</a></li>
-        </ul>   
+        </ul>  
 
-        <ul id="slide-out" class="sidenav">          
+        <ul id="mobile-demo" class="sidenav">          
             <li><a class="subheader"><img  id="logonavmob" src="../assets/img/logo.png">Wellness Reiki</a></li>
             <li><div class="divider"></div></li>
             <li><a href="../index.php"><i class="material-icons">home</i>Accueil</a></li>
-            <li><a href="product.php?productCategory_id=1"><i class="material-icons">lightbulb</i>Produits</a></li>
-            <li><a href="learnmore.php">Plus d'Info</a></li>
+            <li><a href="product.php?productCategory_id=1"><i class="material-icons">shopping_basket</i>Produits</a></li>
+            <li><a href="learnmore.php"><i class="material-icons">lightbulb</i>Plus d'Info</a></li>
             <?php if (isset($_SESSION['userLog'])) { ?> 
                 <li><a href="userPage.php"><i class="material-icons">spa</i>Mon Espace</a></li>
                 <?php

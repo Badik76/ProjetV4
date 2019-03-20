@@ -38,13 +38,13 @@ $resultList = $daterdv->showRDV();
 $commentsList = $comments->showComment2();
 
 //déclaration des regexs   
-$regexName = '/^[A-z\'\- 0-9]{1,}$/';
+$regexName = '/^.{1,}$/';
 $regexImage = '/[^\s]+(\.(?i)(jpg|png|gif|bmp|jpeg))$/';
 $regexDescri = '/^.{1,}$/';
 $regexPrix = '/^[0-9]{1,6}$/';
 // créa tableau pour error
 $errorArray = [];
-
+$adminPageTrue = 'active';
 //Initialise $superUserOK et $superUserDEL en False pour afficher la modification et la suppression en superuser
 $superUserOK = false;
 $superUserDEL = false;
@@ -56,7 +56,6 @@ $upCatSuccess = false;
 $productDEL = false;
 $addProdSuccess = false;
 $upProdSuccess = false;
-
 $deleteRDVOk = false;
 
 /* on crée une variable $noMatch qu'on initialise à false,  
@@ -73,6 +72,7 @@ $showme = '';
 $showme2 = '';
 $showme3 = '';
 $showme4 = '';
+$showme5 = '';
 $showrdvcat = '';
 //vérification pour collapse.
 if (isset($_GET['page']) || (isset($_GET['deleteThis'])) || (isset($_GET['GetUserSuperUser'])) || (isset($_GET['DelSuperUser']))) {
@@ -84,6 +84,12 @@ if (isset($_GET['ValideRDV']) || (isset($_GET['DeleteRDV']))) {
 }
 if (isset($_GET['DeleteCatProd']) || (isset($_GET['idCatToUpdate'])) || (isset($_GET['idProdToUpdate'])) || (isset($_GET['DeleteProd']))) {
     $showme3 = 'active';
+}
+if (isset($_GET['ValideComment']) || (isset($_GET['deleteComment']))) {
+    $showme4 = 'active';
+}
+if (isset($_POST['CalendarButt'])) {
+    $showme5 = 'active';
 }
 // on crée les variables page, limit et start pour définir la page sur laquelle nous nous trouvons, la limite de patients à afficher et à partir de quelle ligne.
 $page = (!empty($_GET['page']) ? htmlspecialchars($_GET['page']) : 1); // on utilise une ternaire pour définir la valeur de page
@@ -101,12 +107,14 @@ if (!empty($_GET['deleteThis'])) {
     $users->users_id = htmlspecialchars($_GET['deleteThis']);
     $users->deleteUser();
     $deleteOk = true;
+    header('http://proprojetpro/views/AdminPage.php');
 }
 
 if (!empty($_GET['deleteComment'])) {
     $comments->comments_id = htmlspecialchars($_GET['deleteComment']);
     $comments->deleteComment();
     $deletecommentOk = true;
+    header('http://proprojetpro/views/AdminPage.php');
 }
 /* on test que $_GET['search'] et qu'il n'est pas vide
  * si ok, on crée un tableau avec la methode findPatientsBySearch avec comme paramètre $_GET['search']
@@ -132,6 +140,7 @@ if (!empty($_GET['GetUserSuperUser'])) {
     $users->putUserSuperUser();
     $_SESSION['typeUsers_id'] = $users->typeUsers_id;
     $superUserOK = true;
+    header('http://proprojetpro/views/AdminPage.php');
 }
 /* on test que $_GET['DelSuperUser'] n'est pas vide
  * si non vide, on attribue à $users id la valeur du get avec un htmlspecialchars pour la protection
@@ -142,6 +151,7 @@ if (!empty($_GET['DelSuperUser'])) {
     $users->delSuperUser();
     $_SESSION['typeUsers_id'] = $users->typeUsers_id;
     $superUserDEL = true;
+    header('http://proprojetpro/views/AdminPage.php');
 }
 
 //On test la valeur idTimeRDV l'array $_POST pour savoir si elle existe
@@ -179,6 +189,7 @@ if (count($errorArray) == 0 && isset($_POST['addCatProd'])) {
         $errorArray['add'] = 'l\'envoie du formulaire à échoué';
     } else {
         $addCatSuccess = true;
+        header('http://proprojetpro/views/AdminPage.php');
     }
 }
 /* on test que $_GET['DeleteCatProd'] n'est pas vide
@@ -189,6 +200,7 @@ if (!empty($_GET['DeleteCatProd'])) {
     $productcategory->productCategory_id = htmlspecialchars($_GET['DeleteCatProd']);
     $productcategory->deleteCatProd();
     $productcategoryDEL = true;
+    header('http://proprojetpro/views/AdminPage.php');
 }
 
 //on vérifie que nous avons crée une entrée submit dans l'array $_POST, si présent on éxécute la méthide updateUserById()
@@ -214,6 +226,7 @@ if (count($errorArray) == 0 && isset($_GET['idCatToUpdate']) && isset($_POST['up
         $errorArray['update'] = 'La mise à jour à échoué';
     } else {
         $upCatSuccess = true;
+        header('http://proprojetpro/views/AdminPage.php');
     }
 }
 
@@ -299,6 +312,7 @@ if (count($errorArray) == 0 && isset($_POST['AddProdButt'])) {
         $errorArray['add'] = 'l\'envoie du formulaire à échoué';
     } else {
         $addProdSuccess = true;
+        header('http://proprojetpro/views/AdminPage.php');
     }
 }
 
@@ -310,6 +324,7 @@ if (!empty($_GET['DeleteProd'])) {
     $products->products_id = htmlspecialchars($_GET['DeleteProd']);
     $products->deleteProd();
     $productsDEL = true;
+    header('http://proprojetpro/views/AdminPage.php');
 }
 
 //On test la valeur ProdCat l'array $_POST pour savoir si elle existe
@@ -332,6 +347,7 @@ if (count($errorArray) == 0 && isset($_GET['idProdToUpdate']) && isset($_POST['U
     $products->products_id = $_GET['idProdToUpdate'];
     if ($products->updateProd()) {
         $upProdSuccess = true;
+        header('http://proprojetpro/views/AdminPage.php');
     } else {
         $errorArray['add'] = 'La mise à jour à échoué';
     }
@@ -345,6 +361,7 @@ if (!empty($_GET['DeleteRDV'])) {
     $daterdv->users_id = htmlspecialchars($_GET['DeleteRDV']);
     $daterdv->deleteRDVbyIDUSER();
     $deleteRDVOk = true;
+    header('http://proprojetpro/views/AdminPage.php');
 }
 
 /* on test que $_GET['GetUserSuperUser'] n'est pas vide
@@ -355,5 +372,6 @@ if (!empty($_GET['ValideRDV'])) {
     $daterdv->dateRDV_id = htmlspecialchars($_GET['ValideRDV']);
     $daterdv->putRDVvalidate();
     $superUserOK = true;
+    header('http://proprojetpro/views/AdminPage.php');
 }
 ?>
